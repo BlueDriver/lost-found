@@ -15,7 +15,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AccountStatusEnum implements EnumInter {
-    PRE(0, "未激活"),
+    PRE(0, "未激活"),//预注册
     NORMAL(1, "正常"),
     FREEZE(2, "已冻结"),
     CANCEL(3, "已注销"),
