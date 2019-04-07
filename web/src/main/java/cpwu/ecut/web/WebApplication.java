@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("cpwu.ecut.*")
+@ComponentScan({"cpwu.ecut.*"})
 public class WebApplication {
 
     public static void main(String[] args) {

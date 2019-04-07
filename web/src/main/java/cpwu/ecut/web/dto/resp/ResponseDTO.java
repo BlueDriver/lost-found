@@ -1,5 +1,6 @@
-package cpwu.ecut.service.dto.resp;
+package cpwu.ecut.web.dto.resp;
 
+import cpwu.ecut.common.constant.clazz.LostFoundException;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 /**
  * lost-found
- * cpwu.ecut.service.dto.base
+ * cpwu.ecut.web.dto.resp
  * 统一响应数据
  *
  * @author BlueDriver
@@ -19,9 +20,14 @@ import java.util.Map;
 @Accessors(chain = true)
 public class ResponseDTO {
     /**
+     * 请求是否成功
+     */
+    private Boolean success;
+    /**
      * 返回码
      *
      * @see ResponseCode
+     * @see cpwu.ecut.common.constant.enums.ErrorEnum
      */
     private Integer code;
     /**
@@ -51,6 +57,7 @@ public class ResponseDTO {
      */
     public static ResponseDTO successObj(Map<String, Object> data) {
         ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccess(true);
         responseDTO.setCode(ResponseCode.SUCCESS);
         responseDTO.setMsg("处理成功");
         responseDTO.setData(data == null ? new HashMap<>() : data);
@@ -58,11 +65,25 @@ public class ResponseDTO {
     }
 
     /**
-     * 设置data
+     * 添加data
      */
     public ResponseDTO putData(String key, Object value) {
         this.getData().put(key, value);
         return this;
+    }
+
+    /**
+     * 辅助构造方法
+     * 系统异常返回，针对非法操作
+     *
+     * @see cpwu.ecut.common.constant.clazz.LostFoundException
+     */
+    public static ResponseDTO sysErrorObj(LostFoundException e) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccess(false);
+        responseDTO.setCode(e.getCode());
+        responseDTO.setMsg(e.getMessage());
+        return responseDTO;
     }
 
     /**
@@ -79,6 +100,7 @@ public class ResponseDTO {
      */
     public static ResponseDTO exceptionObj(Exception e, String msg) {
         ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccess(false);
         responseDTO.setCode(ResponseCode.EXCEPTION);
         responseDTO.setMsg(msg);
         //为便于排查异常，将异常类名赋值为ext

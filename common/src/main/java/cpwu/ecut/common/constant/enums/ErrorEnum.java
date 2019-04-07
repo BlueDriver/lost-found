@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * lost-found
  * cpwu.ecut.common.constant.enums
- * 错误枚举
+ * 业务错误枚举
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -16,8 +16,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorEnum {
     //{}为占位符
-    PASSWORD_USERNAME_ERROR(1000, "账号{}或密码错误"),
-    ;
+    PASSWORD_USERNAME_ERROR(2000, "账号{}或密码错误"),;
 
     private Integer code;
     private String desc;
