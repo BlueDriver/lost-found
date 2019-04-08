@@ -1,6 +1,6 @@
 package cpwu.ecut.dao.inter;
 
-import cpwu.ecut.dao.entity.User;
+import cpwu.ecut.dao.entity.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
- * @date 2019/04/05 12:30 Friday
+ * @date 2019/04/07 19:17 Sunday
  */
 @Repository
-public interface UserDAO extends JpaRepository<User, String> {
+public interface ManagerDAO extends JpaRepository<Manager, String> {
 }
