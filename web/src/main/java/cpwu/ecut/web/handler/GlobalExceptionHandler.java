@@ -1,10 +1,10 @@
 package cpwu.ecut.web.handler;
 
 import cpwu.ecut.common.constant.clazz.LostFoundException;
-import cpwu.ecut.web.config.interceptor.MyInterceptor1;
-import cpwu.ecut.web.dto.resp.ResponseCode;
-import cpwu.ecut.web.dto.resp.ResponseDTO;
+import cpwu.ecut.service.dto.resp.base.ResponseCode;
+import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -73,7 +73,6 @@ public class GlobalExceptionHandler {
         return responseDTO;
     }
 
-
     /**
      * 文件上传大小超限制
      */
@@ -102,9 +101,23 @@ public class GlobalExceptionHandler {
         return responseDTO;
     }
 
+    /**
+     * 针对无请求体的情况
+     */
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseDTO emptyParam(HttpMessageNotReadableException e) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccess(false)
+                .setCode(ResponseCode.PARAM_INVALID)
+                .setMsg("无请求参数")
+                .setExt(e.getClass().getName());
+        return responseDTO;
+    }
+
 
     /**
      * 失物招领系统异常
+     * 业务错误
      */
     @ExceptionHandler(value = LostFoundException.class)
     public ResponseDTO systemErrorHandler(LostFoundException e) {

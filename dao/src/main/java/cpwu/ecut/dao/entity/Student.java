@@ -32,6 +32,11 @@ public class Student {
     @Column(name = "id", nullable = false, length = 64)
     private String id;
     /**
+     * 学校id
+     */
+    @Column(name = "school_id", nullable = false, length = 64)
+    private String schoolId;
+    /**
      * 对应T_USER的id
      */
     @Column(name = "user_id", nullable = false, length = 64)

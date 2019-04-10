@@ -2,9 +2,9 @@ package cpwu.ecut.web.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cpwu.ecut.common.utils.CommonUtils;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.service.utils.MailSenderService;
-import cpwu.ecut.web.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +54,9 @@ public class TaskExecutorConfig implements AsyncConfigurer {
     private String systemEmail;
 
 
-    @Value("${spring.application.name}")
+    @Value("${app.chinese.name}")
     private String appName;
 
-    @Autowired
-    private CommonUtils commonUtils;
     @Autowired
     private MailSenderService mailSenderService;
 
@@ -125,7 +123,7 @@ public class TaskExecutorConfig implements AsyncConfigurer {
             //堆栈信息
             String trace = ExceptionUtils.getStackTrace(throwable);
             //当前时间
-            String now = commonUtils.getFormatDateTimeNow();
+            String now = CommonUtils.getFormatDateTimeNow();
             //模板参数
             Map<String, Object> param = new HashMap<>(4);
             param.put("args", args.toString());
@@ -137,7 +135,7 @@ public class TaskExecutorConfig implements AsyncConfigurer {
                 //向管理员邮箱发送异常提醒邮件
                 for (String adminEmail : adminEmailList) {
                     mailSenderService.sendTemplateMessage(adminEmail, param, "templates/mail/taskError.html",
-                            appName + "系统邮件", systemEmail, appName);
+                            appName + "-系统邮件", systemEmail, appName);
                 }
             } catch (IOException | MessagingException e) {
                 log.error("模板邮件发送异常", e);

@@ -17,7 +17,7 @@ import java.util.Base64;
  */
 @RestController
 public class UploadController {
-    @PostMapping
+    @PostMapping("/upload")
     public String upload(@RequestParam("file") String file){
         Base64.Decoder decoder = Base64.getDecoder();
         // 去掉base64编码的头部 如："data:image/jpeg;base64," 如果不去，转换的图片不可以查看

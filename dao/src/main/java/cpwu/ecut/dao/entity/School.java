@@ -72,7 +72,7 @@ public class School {
      * @see cpwu.ecut.common.constant.enums.AccountStatusEnum
      */
     @Column(nullable = false, columnDefinition = "int(11) default 1")
-    private String status;
+    private Integer status;
     /**
      * 创建时间
      */
@@ -90,5 +90,5 @@ public class School {
      * @see cpwu.ecut.common.constant.enums.RecordStatusEnum
      */
     @Column(name = "record_status", nullable = false, columnDefinition = "int(11) default 1")
-    private String recordStatus;
+    private Integer recordStatus;
 }

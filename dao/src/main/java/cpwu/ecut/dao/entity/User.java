@@ -37,8 +37,13 @@ public class User {
     /**
      * 登录密码（独立）md5加密后存储
      */
-    @Column(name = "password", nullable = false, length = 64)
+    @Column(name = "password", length = 64)
     private String password;
+    /**
+     * 激活码
+     */
+    @Column(name = "activate_code", nullable = false, length = 64)
+    private String activateCode;
     /**
      * 邮箱
      */
@@ -47,7 +52,7 @@ public class User {
     /**
      * 手机号码
      */
-    @Column(name = "phone_number", nullable = false, length = 16)
+    @Column(name = "phone_number", length = 16)
     private String phoneNumber;
     /**
      * 真实姓名
@@ -67,7 +72,7 @@ public class User {
     /**
      * 校区id
      */
-    @Column(name = "campus_id", nullable = false, length = 64)
+    @Column(name = "campus_id", length = 64)
     private String campusId;
     /**
      * 创建时间
@@ -78,7 +83,7 @@ public class User {
     /**
      * 用户最后登录时间
      */
-    @Column(name = "last_login", nullable = false)
+    @Column(name = "last_login")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date lastLogin;
     /**
@@ -87,19 +92,19 @@ public class User {
      * @see cpwu.ecut.common.constant.enums.UserKindEnum
      */
     @Column(nullable = false, columnDefinition = "int(11) default 0")
-    private String kind;
+    private Integer kind;
     /**
      * 用户状态：0：无效（未激活, 1：正常（已激活）, 2：已冻结, 3：已注销, 4：审核中
      *
      * @see cpwu.ecut.common.constant.enums.AccountStatusEnum
      */
     @Column(nullable = false, columnDefinition = "int(11) default 0")
-    private String status;
+    private Integer status;
     /**
      * 记录状态：0：已删除1：有效
      *
      * @see cpwu.ecut.common.constant.enums.RecordStatusEnum
      */
     @Column(name = "record_status", nullable = false, columnDefinition = "int(11) default 1")
-    private String recordStatus;
+    private Integer recordStatus;
 }

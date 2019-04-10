@@ -4,6 +4,7 @@ import cpwu.ecut.common.constant.enums.ErrorEnum;
 import cpwu.ecut.common.constant.enums.GenderEnum;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.dao.entity.Student;
+import cpwu.ecut.service.utils.MailSenderService;
 import cpwu.ecut.service.utils.VPNUtils;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
@@ -12,9 +13,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -203,4 +206,9 @@ public class Test {
         System.err.println(student);
 
     }
+
+    @Autowired
+    private MailSenderService mailSenderService;
+
+
 }
