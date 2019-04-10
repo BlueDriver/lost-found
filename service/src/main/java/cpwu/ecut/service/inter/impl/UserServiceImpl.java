@@ -14,10 +14,12 @@ import cpwu.ecut.dao.inter.SchoolDAO;
 import cpwu.ecut.dao.inter.StudentDAO;
 import cpwu.ecut.dao.inter.UserDAO;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
+import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
 import cpwu.ecut.service.inter.UserService;
 import cpwu.ecut.service.utils.MailSenderService;
 import cpwu.ecut.service.utils.VPNUtils;
+import cpwu.ecut.service.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +45,9 @@ import java.util.Optional;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private VerifyCodeUtils codeUtils;
+
     @Autowired
     private VPNUtils vpnUtils;
 
@@ -88,14 +94,13 @@ public class UserServiceImpl implements UserService {
                 .setStatus(AccountStatusEnum.NORMAL.getCode())
                 .setRecordStatus(RecordStatusEnum.EXISTS.getCode());
         Optional<School> schoolOptional = schoolDAO.findOne(Example.of(schoolEx));
-        School school;
         if (!schoolOptional.isPresent()) {
             //学校不存在
             throw ExceptionUtils.createException(ErrorEnum.SCHOOL_NOT_EXISTS,
                     req.getSchoolId());
         }
         //学校存在
-        school = schoolOptional.get();
+        School school = schoolOptional.get();
 
         //是否为东华理工人？
         if (!RecognizedSchool.ECUT.equals(school.getSchoolName())) {
@@ -112,7 +117,7 @@ public class UserServiceImpl implements UserService {
                 //保存用户
                 User user = saveUser(student, req.getEmail(), school);
                 //发激活邮件
-                sendActivateMail(user, school);
+                sendActivateMail(user, school.getSchoolName());
                 return null;
 //                throw ExceptionUtils.createException(ErrorEnum.STUDENT_NUM_NO_USER_EXISTS,
 //                        student.getStudentNum(), student.getUserId());
@@ -122,9 +127,12 @@ public class UserServiceImpl implements UserService {
             if (AccountStatusEnum.PRE.equals(user.getStatus())) {
                 //未激活
                 user.setActivateCode(CommonUtils.getUUID());//重置激活码
+                String initPassword = codeUtils.getRandomNum(6);//初始密码
+                user.setPassword(CommonUtils.encodeByMd5(initPassword));//md5加密保存
                 userDAO.saveAndFlush(user);
+                user.setPassword(initPassword);
                 //发送激活邮件
-                sendActivateMail(user, school);
+                sendActivateMail(user, school.getSchoolName());
                 return null;
             } else if (AccountStatusEnum.NORMAL.equals(user.getStatus())) {
                 //状态正常
@@ -138,14 +146,19 @@ public class UserServiceImpl implements UserService {
                 //session设置
                 session.setAttribute("user", user);
                 session.setAttribute("school", school);
-                session.setAttribute("student", student);
+                //session.setAttribute("student", student);
 
                 //返回
                 StudentRecognizeResp resp = new StudentRecognizeResp();
                 resp.setIcon(user.getIcon())
                         .setRealName(user.getRealName())
                         .setStudentNum(student.getStudentNum())
-                        .setSchoolName(school.getSchoolName());
+                        .setSchoolName(school.getSchoolName())
+                        .setKind(user.getKind())
+                        .setEmail(user.getEmail())
+                        .setGender(student.getGender())
+                        .setCreateTime(user.getCreateTime())
+                        .setLastLogin(user.getLastLogin());
                 return resp;
             } else if (AccountStatusEnum.FREEZE.equals(user.getStatus())) {
                 //冻结
@@ -167,10 +180,13 @@ public class UserServiceImpl implements UserService {
         //保存用户
         User user = saveUser(student, req.getEmail(), school);
         //发激活邮件
-        sendActivateMail(user, school);
+        sendActivateMail(user, school.getSchoolName());
         return null;
     }
 
+    /**
+     * 激活
+     */
     @Override
     public String activateUser(String code) {
         User userEx = new User();
@@ -195,32 +211,111 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 登录
+     */
+    @Override
+    public StudentRecognizeResp loginUser(UserLoginReq req, HttpSession session) throws Exception {
+        Optional<School> schoolOptional = schoolDAO.findById(req.getSchoolId());
+        if (!schoolOptional.isPresent()) {
+            //学校不存在
+            throw ExceptionUtils.createException(ErrorEnum.SCHOOL_NOT_EXISTS, req.getSchoolId());
+        }
+        //学校存在
+        School school = schoolOptional.get();
+
+        User userEx = new User();
+        userEx.setUsername(req.getUsername())
+                .setSchoolId(req.getSchoolId());
+        Optional<User> userOptional = userDAO.findOne(Example.of(userEx));
+        //用户不存在
+        if (!userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, req.getUsername());
+        }
+
+        //用户存在
+        User user = userOptional.get();
+
+        if (AccountStatusEnum.PRE.equals(user.getStatus())) {
+            //未激活
+            user.setActivateCode(CommonUtils.getUUID());//重置激活码
+            String initPassword = codeUtils.getRandomNum(6);//初始密码
+            user.setPassword(CommonUtils.encodeByMd5(initPassword));//md5加密保存
+            userDAO.saveAndFlush(user);
+            user.setPassword(initPassword);
+            //发送激活邮件
+            sendActivateMail(user, school.getSchoolName());
+            return null;
+        } else if (AccountStatusEnum.NORMAL.equals(user.getStatus())) {
+            //密码不正确
+            if (!CommonUtils.encodeByMd5(req.getPassword()).equals(user.getPassword())) {
+                throw ExceptionUtils.createException(ErrorEnum.PASSWORD_USERNAME_ERROR, req.getUsername());
+            }
+
+            //更新最后登录时间
+            user.setLastLogin(new Date());
+            userDAO.save(user);
+            //session设置
+            session.setAttribute("user", user);
+            session.setAttribute("school", school);
+            //返回
+
+            StudentRecognizeResp resp = new StudentRecognizeResp();
+            resp.setIcon(user.getIcon())
+                    .setRealName(user.getRealName())
+                    .setStudentNum(user.getUsername())
+                    .setSchoolName(school.getSchoolName())
+                    .setKind(user.getKind())
+                    .setEmail(user.getEmail())
+                    .setGender(user.getGender())
+                    .setCreateTime(user.getCreateTime())
+                    .setLastLogin(user.getLastLogin());
+            return resp;
+        } else if (AccountStatusEnum.FREEZE.equals(user.getStatus())) {
+            //冻结
+            throw ExceptionUtils.createException(ErrorEnum.USER_HAS_FREEZE,
+                    user.getUsername());
+        } else {
+            //非法状态
+            throw ExceptionUtils.createException(ErrorEnum.USER_STATUS_ERROR,
+                    user.getUsername(), user.getStatus());
+        }
+
+
+    }
+
+    /**
      * 创建并保存新用户
      */
-    private User saveUser(Student student, String email, School school) {
+    private User saveUser(Student student, String email, School school) throws UnsupportedEncodingException {
         User user = new User();
+        String initPassword = codeUtils.getRandomNum(6);
         user.setId(student.getUserId())
                 .setUsername(student.getStudentNum())
                 .setActivateCode(CommonUtils.getUUID())
+                .setPassword(CommonUtils.encodeByMd5(initPassword))
                 .setEmail(email)
                 .setRealName(student.getName())
+                .setGender(student.getGender())
                 .setSchoolId(school.getSchoolId())
                 .setCreateTime(new Date())
                 .setKind(UserKindEnum.STUDENT.getCode())
                 .setStatus(AccountStatusEnum.PRE.getCode())
                 .setRecordStatus(RecordStatusEnum.EXISTS.getCode());
-        return userDAO.saveAndFlush(user);
+        userDAO.saveAndFlush(user);
+        return user.setPassword(initPassword);
     }
 
     /**
      * 发送激活邮件
      */
-    private void sendActivateMail(User user, School school) throws IOException, MessagingException {
+    private void sendActivateMail(User user, String schoolName) throws IOException, MessagingException {
         //模板参数
         Map<String, Object> param = new HashMap<>();
         param.put("appName", appName);
-        param.put("username", user.getUsername());
-        param.put("schoolName", school.getSchoolName());
+        param.put("username", CommonUtils.replaceString(user.getUsername(), 4, 3));
+        param.put("realName", CommonUtils.replaceString(user.getRealName(), 1, 0));
+        param.put("password", user.getPassword());//初始密码
+        param.put("schoolName", schoolName);
         param.put("link", activateUrl + user.getActivateCode());
         mailSenderService.sendTemplateMessage(user.getEmail(), param,
                 "templates/mail/userActivate.html", "账号激活通知",

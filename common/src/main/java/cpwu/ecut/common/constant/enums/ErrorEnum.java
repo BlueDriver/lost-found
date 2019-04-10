@@ -22,10 +22,10 @@ public enum ErrorEnum {
     USER_STATUS_ERROR(2002, "用户{}状态{}未知错误"),
     USER_HAS_FREEZE(2003, "用户{}已被冻结"),
     VERIFY_CODE_ERROR(2004, "验证码错误"),
+    USER_NOT_EXISTS(2005, "用户{}不存在"),
     //学校相关
     SCHOOL_NOT_EXISTS(2101, "学校{}不存在"),
-    SCHOOL_NOT_SUPPORT_REG(2102, "学校{}暂不不支持认证"),
-    ;
+    SCHOOL_NOT_SUPPORT_REG(2102, "学校{}暂不不支持认证"),;
 
     private Integer code;
     private String desc;

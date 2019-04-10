@@ -1,6 +1,7 @@
 package cpwu.ecut.service.inter;
 
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
+import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
 
 import javax.servlet.http.HttpSession;
@@ -19,12 +20,15 @@ public interface UserService {
      */
     StudentRecognizeResp recognizeStudent(StudentRecognizeReq req, HttpSession session) throws Exception;
 
+    /**
+     * 激活用户
+     */
     String activateUser(String code);
 
-//    /**
-//     * 学号+密码校园通认证
-//     */
-//    void recognize(Student student);
+    /**
+     * 用户登录
+     */
+    StudentRecognizeResp loginUser(UserLoginReq req, HttpSession session) throws Exception;
 
 
 }

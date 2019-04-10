@@ -37,7 +37,7 @@ public class User {
     /**
      * 登录密码（独立）md5加密后存储
      */
-    @Column(name = "password", length = 64)
+    @Column(name = "password", nullable = false, length = 64)
     private String password;
     /**
      * 激活码
@@ -59,6 +59,14 @@ public class User {
      */
     @Column(name = "real_name", nullable = false, length = 256)
     private String realName;
+
+    /**
+     * 性别：-1未知，0女，1男     *
+     *
+     * @see cpwu.ecut.common.constant.enums.GenderEnum
+     */
+    @Column(nullable = false, columnDefinition = "int(11) default -1")
+    private Integer gender;
     /**
      * 头像
      */

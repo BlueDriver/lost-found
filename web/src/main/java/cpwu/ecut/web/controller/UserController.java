@@ -3,6 +3,7 @@ package cpwu.ecut.web.controller;
 import cpwu.ecut.common.constant.enums.ErrorEnum;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
+import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.UserService;
@@ -34,16 +35,25 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 认证登录
+     * 认证/登录
      */
     @PostMapping("/recognize")
     @ResponseBody
     public ResponseDTO recognize(@Valid @RequestBody StudentRecognizeReq req, HttpSession session) throws Exception {
-        String code = (String) session.getAttribute("code");
-        if (!req.getCode().equals(code)) {
-            throw ExceptionUtils.createException(ErrorEnum.VERIFY_CODE_ERROR);
-        }
+        checkCode(session, req.getCode());
         StudentRecognizeResp resp = userService.recognizeStudent(req, session);
+        session.removeAttribute("code");
+        return ResponseDTO.successObj("user", resp);
+    }
+
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseDTO recognize(@Valid @RequestBody UserLoginReq req, HttpSession session) throws Exception {
+        checkCode(session, req.getCode());
+        StudentRecognizeResp resp = userService.loginUser(req, session);
         session.removeAttribute("code");
         return ResponseDTO.successObj("user", resp);
     }
@@ -56,5 +66,18 @@ public class UserController {
         return "/static/activate/" + userService.activateUser(code);
     }
 
+    /**
+     * todo: 4/10/2019,010 09:37 PM
+     * 重置密码
+     */
+
+    /**
+     * 校验验证码
+     */
+    private void checkCode(HttpSession session, String code) throws Exception {
+        if (!code.equals(session.getAttribute("code"))) {
+            throw ExceptionUtils.createException(ErrorEnum.VERIFY_CODE_ERROR);
+        }
+    }
 
 }
