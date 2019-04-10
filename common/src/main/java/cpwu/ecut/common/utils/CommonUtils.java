@@ -153,4 +153,32 @@ public class CommonUtils {
         }
         return ip;
     }
+
+    /**
+     * 保留前几个和后几个字符，其他部分被替换
+     *
+     * @param source      源字符串
+     * @param before      前几个将被保留
+     * @param after       后几个将被保留
+     * @param replacement 替换成的字符
+     */
+    public static String replaceString(String source, int before, int after, String replacement) {
+        if (before + after >= source.length()) {
+            return source;
+        }
+        StringBuffer sb = new StringBuffer(source.length());
+        sb.append(source.substring(0, before));
+        for (int i = 0, t = source.length() - before - after; i < t; i++) {
+            sb.append(replacement);
+        }
+        sb.append(source.substring(source.length() - after));
+        return sb.toString();
+    }
+
+    /**
+     * 以星号替换部分字符
+     */
+    public static String replaceString(String source, int start, int end) {
+        return replaceString(source, start, end, "*");
+    }
 }
