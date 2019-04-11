@@ -1,10 +1,9 @@
 package cpwu.ecut.web.config.interceptor;
 
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.unit.DataSize;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import cpwu.ecut.common.constant.enums.ErrorEnum;
+import cpwu.ecut.common.constant.enums.UserKindEnum;
+import cpwu.ecut.common.utils.ExceptionUtils;
+import cpwu.ecut.dao.entity.User;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,18 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * parent
  * demo.web.config.interceptor
- * 自定义拦截器1
+ * 管理员拦截器
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
  * @date 2019/03/27 20:15 Wednesday
  */
-public class MyInterceptor1 extends HandlerInterceptorAdapter {
-    /**
-     * 文件上传最大尺寸，此为一次请求所有文件（单个或多个）的总最大尺寸
-     */
-    @Value("${max.upload.size}")
-    private DataSize maxUploadSize;
+public class AdminInterceptor extends HandlerInterceptorAdapter {
 
     /**
      * 预处理回调方法，实现处理器的预处理（如检查登陆），第三个参数为响应的处理器，自定义Controller
@@ -33,23 +27,11 @@ public class MyInterceptor1 extends HandlerInterceptorAdapter {
      * 此时我们需要通过response来产生响应；
      */
     @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
-        //System.out.println("preHandler1 uri: " + req.getRequestURI());
-        /**
-         *  文件上传大小校验
-         *  https://my.oschina.net/scjelly/blog/523705
-         */
-        if (req != null && ServletFileUpload.isMultipartContent(req)) {
-            ServletRequestContext ctx = new ServletRequestContext(req);
-            if (ctx.contentLength() > maxUploadSize.toBytes()) {
-                /**
-                 * 将被统一异常处理捕获
-                 * @see demo.web.handler.GlobalExceptionHandler#handleMax(MaxUploadSizeExceededException)
-                 */
-                throw new MaxUploadSizeExceededException(maxUploadSize.toMegabytes());
-            }
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+        User user = (User) req.getSession().getAttribute("user");
+        if (user == null || !UserKindEnum.MANAGER.equals(user.getKind())) {
+            throw ExceptionUtils.createException(ErrorEnum.NO_PERMISSION);
         }
-
         return true;
     }
 

@@ -1,6 +1,8 @@
 package cpwu.ecut.web.config;
 
-import cpwu.ecut.web.config.interceptor.MyInterceptor1;
+import cpwu.ecut.web.config.interceptor.AdminInterceptor;
+import cpwu.ecut.web.config.interceptor.DefaultInterceptor;
+import cpwu.ecut.web.config.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,9 +26,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //拦截所有
-        registry.addInterceptor(new MyInterceptor1()).addPathPatterns("/**");
+        registry.addInterceptor(new DefaultInterceptor()).addPathPatterns("/**");
         //拦截指定前缀
-        //registry.addInterceptor(new MyInterceptor2()).addPathPatterns(new String[]{"/admin", "/admin/*"});
+        //管理员
+        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/api/v1/admin/**");
+        //必须登录的
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/v1/common/**", "/api/v1/user/**");
+
+        //公开的：api/v1/public/**
     }
 
     /**

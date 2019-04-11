@@ -25,7 +25,13 @@ public enum ErrorEnum {
     USER_NOT_EXISTS(2005, "用户{}不存在"),
     //学校相关
     SCHOOL_NOT_EXISTS(2101, "学校{}不存在"),
-    SCHOOL_NOT_SUPPORT_REG(2102, "学校{}暂不不支持认证"),;
+    SCHOOL_NOT_SUPPORT_REG(2102, "学校{}暂不不支持认证"),
+    //类别
+    CATEGORY_EXISTS(2201, "类别{}已存在"),
+
+    //权限相关
+    NO_PERMISSION(2301, "无此操作权限，请重试或重新登录"),
+    ;
 
     private Integer code;
     private String desc;
