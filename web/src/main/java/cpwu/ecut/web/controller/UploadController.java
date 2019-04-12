@@ -21,6 +21,8 @@ public class UploadController {
     public String upload(@RequestParam("file") String file){
         Base64.Decoder decoder = Base64.getDecoder();
         // 去掉base64编码的头部 如："data:image/jpeg;base64," 如果不去，转换的图片不可以查看
+        //data:image/x-icon;base64,
+        //data:image/png;base64,
         file = file.substring(23);
         //解码
         byte[] imgByte = decoder.decode(file);

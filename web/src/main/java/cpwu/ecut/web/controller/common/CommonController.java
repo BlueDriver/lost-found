@@ -33,7 +33,6 @@ public class CommonController {
 
     @PostMapping("/category")
     public ResponseDTO categoryList(HttpSession session) {
-        //User user = isLogin(session);
         User user = (User) session.getAttribute("user");
         List<CategoryListResp> list = categoryService.getCategoryList(user.getSchoolId());
         return ResponseDTO.successObj("list", list);

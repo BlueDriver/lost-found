@@ -18,7 +18,10 @@ public enum LevelEnum implements EnumInter {
     SYSTEM(0, "系统级别"),
     SCHOOL(1, "学校级别"),
     CAMPUS(2, "校区级别"),
-    PERSONAL(3, "个人级别");
+    PERSONAL(3, "个人级别"),
+    MANAGER_ALL(4, "所有管理员"),
+    USER_ALL(5, "所有用户"),
+    ;
 
     private Integer code;
     private String desc;

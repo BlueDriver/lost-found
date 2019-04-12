@@ -12,6 +12,8 @@ import cpwu.ecut.service.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -32,7 +34,8 @@ import java.io.IOException;
  * @email cpwu@foxmail.com
  * @date 2019/04/08 14:47 Monday
  */
-@RestController
+@Controller
+@Validated
 @RequestMapping("/api/v1/public")
 public class PublicController {
     @Autowired
@@ -42,6 +45,7 @@ public class PublicController {
     private VerifyCodeUtils verifyCodeUtils;
 
     @GetMapping("/schools")
+    @ResponseBody
     public ResponseDTO schools() {
         return ResponseDTO.successObj("schools", schoolService.getSchools());
     }
@@ -71,6 +75,7 @@ public class PublicController {
 
     @Autowired
     private UserService userService;
+
     /**
      * 认证/登录
      */
