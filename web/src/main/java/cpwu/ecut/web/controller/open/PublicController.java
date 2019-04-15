@@ -81,7 +81,7 @@ public class PublicController {
      */
     @PostMapping("/recognize")
     @ResponseBody
-    public ResponseDTO recognize(@Valid @RequestBody StudentRecognizeReq req, HttpSession session) throws Exception {
+    public ResponseDTO studentRecognize(@Valid @RequestBody StudentRecognizeReq req, HttpSession session) throws Exception {
         checkVerifyCode(session, req.getCode());
         StudentRecognizeResp resp = userService.recognizeStudent(req, session);
         session.removeAttribute("code");
@@ -93,7 +93,7 @@ public class PublicController {
      */
     @PostMapping("/login")
     @ResponseBody
-    public ResponseDTO recognize(@Valid @RequestBody UserLoginReq req, HttpSession session) throws Exception {
+    public ResponseDTO userLogin(@Valid @RequestBody UserLoginReq req, HttpSession session) throws Exception {
         checkVerifyCode(session, req.getCode());
         StudentRecognizeResp resp = userService.loginUser(req, session);
         session.removeAttribute("code");

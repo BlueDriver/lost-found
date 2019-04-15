@@ -34,6 +34,7 @@ public class DefaultInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
+        //resp.setHeader("Access-Control-Allow-Origin", req.getHeader("Origin"));
         //System.out.println("preHandler1 uri: " + req.getRequestURI());
         /**
          *  文件上传大小校验
@@ -44,11 +45,18 @@ public class DefaultInterceptor extends HandlerInterceptorAdapter {
             if (ctx.contentLength() > maxUploadSize.toBytes()) {
                 /**
                  * 将被统一异常处理捕获
-                 * @see demo.web.handler.GlobalExceptionHandler#handleMax(MaxUploadSizeExceededException)
+                 * @see cpwu.ecut.web.handler.GlobalExceptionHandler#paramHandler(MaxUploadSizeExceededException)
                  */
                 throw new MaxUploadSizeExceededException(maxUploadSize.toMegabytes());
             }
         }
+        /**
+         * todo: 4/15/2019,015 08:52 PM
+         * will err
+         */
+       /* else if(req.getContentLength() > maxUploadSize.toBytes()){
+            throw new MaxUploadSizeExceededException(maxUploadSize.toMegabytes());
+        }*/
 
         return true;
     }
