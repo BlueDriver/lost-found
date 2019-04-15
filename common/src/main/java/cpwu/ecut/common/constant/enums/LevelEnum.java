@@ -20,7 +20,7 @@ public enum LevelEnum implements EnumInter {
     CAMPUS(2, "校区级别"),
     PERSONAL(3, "个人级别"),
     MANAGER_ALL(4, "所有管理员"),
-    USER_ALL(5, "所有用户"),
+    USER_ALL(5, "所有普通用户"),//管理员除外的
     ;
 
     private Integer code;

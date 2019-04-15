@@ -22,7 +22,7 @@ public class ExceptionUtils {
      */
     public static Exception createException(ErrorEnum errorEnum, Object... args) {
         //占位符替换
-        return new LostFoundException(errorEnum.getCode(), MessageFormatter.format(errorEnum.getDesc(), args).getMessage());
+        return new LostFoundException(errorEnum.getCode(), MessageFormatter.arrayFormat(errorEnum.getDesc(), args).getMessage());
     }
 
     /**

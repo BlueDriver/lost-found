@@ -31,6 +31,9 @@ public enum ErrorEnum {
 
     //权限相关
     NO_PERMISSION(2301, "无此操作权限，请重试或重新登录"),
+
+    //系统相关
+    NO_MATCH_ENUM(3301, "{}中无匹配类型{}"),
     ;
 
     private Integer code;

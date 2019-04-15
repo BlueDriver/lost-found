@@ -15,6 +15,7 @@ import cpwu.ecut.service.inter.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -39,10 +40,6 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public void addCategory(CategoryAddReq req, User user) throws Exception {
-        /**
-         * todo: 4/11/2019,011 03:17 PM
-         * 拦截，校验权限
-         */
         //set key
         CategoryKey key = new CategoryKey();
         key.setName(req.getName().trim())
@@ -68,7 +65,8 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryListResp> getCategoryList(String targetId) {
         Category categoryEx = new Category();
         categoryEx.setTargetId(targetId);
-        List<Category> categoryList = categoryDAO.findAll(Example.of(categoryEx));
+        List<Category> categoryList = categoryDAO.findAll(Example.of(categoryEx),
+                new Sort(Sort.Direction.DESC, "createTime"));
         return FieldUtils.copyProperties(categoryList, CategoryListResp.class);
     }
 }

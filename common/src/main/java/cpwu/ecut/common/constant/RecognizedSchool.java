@@ -3,6 +3,7 @@ package cpwu.ecut.common.constant;
 /**
  * lost-found
  * cpwu.ecut.common.constant
+ * 支持校园同认证的高校
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
