@@ -63,7 +63,7 @@ public class LostFound {
     @Column(nullable = true, length = 512)
     private String location;
     /**
-     * 图片1链接
+     * 图片链接(json array)
      */
     @Column(nullable = true, length = 1024)
     private String images;
@@ -91,7 +91,7 @@ public class LostFound {
      *
      * @see cpwu.ecut.common.constant.enums.YesNoEnum
      */
-    @Column(nullable = false, columnDefinition = "int(11) default 0")
+    @Column(name = "fix_top", nullable = false, columnDefinition = "int(11) default 0")
     private Integer fixTop;
     /**
      * 浏览次数
@@ -101,7 +101,7 @@ public class LostFound {
     /**
      * 创建时间
      */
-    @Column(nullable = false)
+    @Column(name = "create_time", nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date createTime;
     /**

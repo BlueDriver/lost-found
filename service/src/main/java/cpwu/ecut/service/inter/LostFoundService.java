@@ -1,6 +1,8 @@
 package cpwu.ecut.service.inter;
 
 import cpwu.ecut.service.dto.req.PublicationAddReq;
+import cpwu.ecut.service.dto.req.PublicationListReq;
+import cpwu.ecut.service.dto.resp.PublicationPageResp;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,5 +18,10 @@ public interface LostFoundService {
     /**
      * 发布启事
      */
-    void add(PublicationAddReq req, HttpSession session);
+    void add(PublicationAddReq req, HttpSession session) throws Exception;
+
+    /**
+     * 查询列表
+     */
+    PublicationPageResp page(PublicationListReq req, HttpSession session) throws Exception;
 }

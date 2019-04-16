@@ -24,4 +24,13 @@ public class EnumUtils {
         }
         throw ExceptionUtils.createException(ErrorEnum.NO_MATCH_ENUM, inters.getClass().getSimpleName(), code);
     }
+
+    public static boolean containsCode(Integer code, EnumInter[] inters) {
+        for (EnumInter en : inters) {
+            if (en.equals(code)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

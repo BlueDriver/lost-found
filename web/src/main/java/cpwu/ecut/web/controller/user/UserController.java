@@ -1,12 +1,10 @@
 package cpwu.ecut.web.controller.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import cpwu.ecut.common.constant.enums.ApplyKindEnum;
-import cpwu.ecut.common.utils.EnumUtils;
-import cpwu.ecut.dao.entity.LostFound;
 import cpwu.ecut.service.dto.req.PublicationAddReq;
+import cpwu.ecut.service.dto.req.PublicationListReq;
+import cpwu.ecut.service.dto.resp.PublicationPageResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
-import cpwu.ecut.web.utils.ImageUtils;
+import cpwu.ecut.service.inter.LostFoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
 
 /**
  * lost-found
@@ -35,27 +30,20 @@ import java.util.List;
 @RequestMapping("/api/v1/user")
 public class UserController {
     @Autowired
-    private ImageUtils imageUtils;
+    private LostFoundService lostFoundService;
 
     /**
      * 发布启事
      */
     @PostMapping("/pub")
-    public ResponseDTO publicationAddReq(@Valid @RequestBody PublicationAddReq req, HttpSession session) throws Exception {
-        EnumUtils.checkAndGetCode(req.getApplyKind(), ApplyKindEnum.values());
-        LostFound lostFound = new LostFound();
-        List<String> imageList = new ArrayList<>(req.getImages().size());
-        Base64.Decoder decoder = Base64.getDecoder();
-        for (String img : req.getImages()) {
-            String image = imageUtils.getBase64Image(img);
-            byte[] bytes = decoder.decode(image);
-            String fileName = imageUtils.copyFileToResource(bytes).getFilename();
-            imageList.add(fileName);
-        }
-        //System.err.println(imageList);
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(imageList);
-        return ResponseDTO.successObj("list", mapper.readValue(json, List.class));
+    public ResponseDTO publicationAdd(@Valid @RequestBody PublicationAddReq req, HttpSession session) throws Exception {
+        lostFoundService.add(req, session);
+        return ResponseDTO.successObj();
     }
 
+    @PostMapping("/page")
+    public ResponseDTO publicationPage(@Valid @RequestBody PublicationListReq req, HttpSession session) throws Exception {
+        PublicationPageResp resp = lostFoundService.page(req, session);
+        return ResponseDTO.successObj("page", resp);
+    }
 }

@@ -23,6 +23,8 @@ public enum ErrorEnum {
     USER_HAS_FREEZE(2003, "用户{}已被冻结"),
     VERIFY_CODE_ERROR(2004, "验证码错误"),
     USER_NOT_EXISTS(2005, "用户{}不存在"),
+    USER_LOGIN_ERROR(2006, "用户登录状态异常，请重新登录"),
+
     //学校相关
     SCHOOL_NOT_EXISTS(2101, "学校{}不存在"),
     SCHOOL_NOT_SUPPORT_REG(2102, "学校{}暂不不支持认证"),

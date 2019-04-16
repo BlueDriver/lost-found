@@ -1,4 +1,4 @@
-package cpwu.ecut.web.utils;
+package cpwu.ecut.service.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -12,6 +12,7 @@ import java.io.IOException;
 /**
  * lost-found
  * cpwu.ecut.web.utils
+ * base64图片处理工具类
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -29,7 +30,6 @@ public class ImageUtils {
     //data:image/png;base64,
     private static final String flag = ";base64,";
     private static final String imageSuffix = ".jpg";
-
 
     /**
      * 去掉base64头部
