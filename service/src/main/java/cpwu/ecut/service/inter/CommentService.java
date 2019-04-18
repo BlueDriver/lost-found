@@ -28,8 +28,13 @@ public interface CommentService {
 
 
     /**
-     *  用户消息（评论）
+     * 用户消息（评论）
      */
     List<UserMessage> listMessage(HttpSession session) throws Exception;
+
+    /**
+     * 删除评论
+     */
+    void removeComment(List<String> idList, HttpSession session) throws Exception;
 
 }

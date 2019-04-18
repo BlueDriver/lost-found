@@ -96,4 +96,13 @@ public class UserController {
         return ResponseDTO.successObj();
     }
 
+    /**
+     * 删除评论
+     */
+    @PostMapping("/removeComment")
+    public ResponseDTO removeComment(@Valid @RequestBody PublicationRemoveReq req, HttpSession session) throws Exception {
+        commentService.removeComment(req.getIdList(), session);
+        return ResponseDTO.successObj();
+    }
+
 }

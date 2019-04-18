@@ -2,6 +2,7 @@ package cpwu.ecut.service.inter.impl;
 
 import cpwu.ecut.common.constant.enums.ErrorEnum;
 import cpwu.ecut.common.constant.enums.RecordStatusEnum;
+import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.common.utils.CommonUtils;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.dao.entity.Comment;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -98,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
 
         List<String> lostIdList = new ArrayList<>(lostFoundList.size());
         lostFoundList.forEach(item -> lostIdList.add(item.getId()));
-        List<Comment> commentList = commentDAO.findAllByLostFoundIdIn(lostIdList);
+        List<Comment> commentList = commentDAO.findAllByLostFoundIdIn(lostIdList);//查出来的包括状态为已删除的
 
         List<String> userIdList = new ArrayList<>(commentList.size());
         commentList.forEach(item -> userIdList.add(item.getUserId()));
@@ -119,6 +121,9 @@ public class CommentServiceImpl implements CommentService {
         List<UserMessage> list = new ArrayList<>(commentList.size());
         UserMessage message;
         for (Comment comment : commentList) {
+            if (RecordStatusEnum.DELETED.equals(comment.getRecordStatus())) {
+                continue;
+            }
             l = lostFoundMap.get(comment.getLostFoundId());
             u = userMap.get(comment.getUserId());
             message = new UserMessage();
@@ -147,5 +152,31 @@ public class CommentServiceImpl implements CommentService {
         Map<String, User> map = new HashMap(list.size());
         list.forEach(item -> map.put(item.getId(), item));
         return map;
+    }
+
+    @Override
+    public void removeComment(List<String> idList, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        List<Comment> commentList = commentDAO.findAllById(idList);
+        if (CollectionUtils.isEmpty(commentList)) {
+            return;
+        }
+        //管理员
+        if (UserKindEnum.MANAGER.equals(user.getKind())) {
+            commentList.forEach(item -> item.setRecordStatus(RecordStatusEnum.DELETED.getCode()));
+            commentDAO.saveAll(commentList);
+            return;
+        }
+        //学生，只能操作自己的
+        List<Comment> mine = new ArrayList<>(commentList.size());
+        commentList.forEach(item -> {
+            if (item.getUserId().equals(user.getId())) {
+                mine.add(item.setRecordStatus(RecordStatusEnum.DELETED.getCode()));
+            }
+        });
+        if (CollectionUtils.isEmpty(mine)) {
+            return;
+        }
+        commentDAO.saveAll(mine);
     }
 }
