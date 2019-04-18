@@ -3,6 +3,7 @@ package cpwu.ecut.web.controller.user;
 import cpwu.ecut.service.dto.req.CommentAddReq;
 import cpwu.ecut.service.dto.req.PublicationAddReq;
 import cpwu.ecut.service.dto.req.PublicationListReq;
+import cpwu.ecut.service.dto.req.PublicationRemoveReq;
 import cpwu.ecut.service.dto.resp.PublicationPageResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CommentService;
@@ -86,5 +87,13 @@ public class UserController {
         return ResponseDTO.successObj("list", commentService.listMessage(session));
     }
 
+    /**
+     * 删除启事
+     */
+    @PostMapping("/removeLost")
+    public ResponseDTO removeLostFound(@Valid @RequestBody PublicationRemoveReq req, HttpSession session) throws Exception {
+        lostFoundService.removeLostFound(req.getIdList(), session);
+        return ResponseDTO.successObj();
+    }
 
 }

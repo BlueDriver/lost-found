@@ -240,4 +240,32 @@ public class LostFoundServiceImpl implements LostFoundService {
 
         return detail;
     }
+
+    @Override
+    public void removeLostFound(List<String> idList, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        List<LostFound> lostFoundList = lostFoundDAO.findAllById(idList);
+        if (CollectionUtils.isEmpty(lostFoundList)) {
+            return;
+        }
+        //管理员
+        if (UserKindEnum.MANAGER.equals(user.getKind())) {
+            lostFoundList.forEach(item -> item.setRecordStatus(RecordStatusEnum.DELETED.getCode()));
+            lostFoundDAO.saveAll(lostFoundList);
+            return;
+        }
+        //学生，只能操作自己的
+        List<LostFound> mine = new ArrayList<>(lostFoundList.size());
+        lostFoundList.forEach(item -> {
+            if (item.getUserId().equals(user.getId())) {
+                mine.add(item.setRecordStatus(RecordStatusEnum.DELETED.getCode()));
+            }
+        });
+        if (CollectionUtils.isEmpty(mine)) {
+            return;
+        }
+        lostFoundDAO.saveAll(mine);
+    }
+
 }
+
