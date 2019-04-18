@@ -167,7 +167,8 @@ public class LostFoundServiceImpl implements LostFoundService {
         Set<String> lostIdSet = new HashSet<>(lostFoundList.size());
         lostFoundList.forEach(i -> lostIdSet.add(i.getId()));
 
-        List<String> idList = commentDAO.findCommentIdIn(lostIdSet);
+        List<String> idList = commentDAO.findCommentIdInAndRecordStatusEquals(lostIdSet,
+                RecordStatusEnum.EXISTS.getCode());
 
         Map<String, Long> commentMap = new HashMap<>(idList.size());
         for (String id : idList) {

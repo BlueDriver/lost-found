@@ -20,9 +20,11 @@ import java.util.Set;
 @Repository
 public interface CommentDAO extends JpaRepository<Comment, String> {
     List<Comment> findAllByLostFoundIdIn(Iterable<String> list);
+
     /**
-     *  根据启事id查询相关的评论的id（用户统计评论数量）
+     * 根据启事id查询相关的评论的id（用户统计评论数量）
      */
-    @Query("select c.lostFoundId from Comment c where c.lostFoundId in(:idList)")
-    List<String> findCommentIdIn(@Param("idList") Set<String> lostFoundIdList);
+    @Query("select c.lostFoundId from Comment c where c.lostFoundId in(:idList) and c.recordStatus = :status")
+    List<String> findCommentIdInAndRecordStatusEquals(@Param("idList") Set<String> lostFoundIdList,
+                                                      @Param("status") Integer status);
 }

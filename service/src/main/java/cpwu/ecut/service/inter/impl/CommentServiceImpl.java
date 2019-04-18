@@ -137,7 +137,6 @@ public class CommentServiceImpl implements CommentService {
             list.add(message);
         }
 
-
         return list;
     }
 
@@ -167,10 +166,20 @@ public class CommentServiceImpl implements CommentService {
             commentDAO.saveAll(commentList);
             return;
         }
-        //学生，只能操作自己的
+        //学生，只能操作自己的评论，以及是自己发布的招领的评论
         List<Comment> mine = new ArrayList<>(commentList.size());
+
+        Set<String> lostIdSet = new HashSet<>(commentList.size());
+        commentList.forEach(item -> lostIdSet.add(item.getLostFoundId()));
+        List<LostFound> lostFoundList = lostFoundDAO.findAllById(lostIdSet);
+
+        Map<String, LostFound> lostFoundMap = new HashMap<>(lostFoundList.size());
+        lostFoundList.forEach(item -> lostFoundMap.put(item.getId(), item));
+
         commentList.forEach(item -> {
-            if (item.getUserId().equals(user.getId())) {
+            if (item.getUserId().equals(user.getId()) || //自己发布的评论
+                    lostFoundMap.get(item.getLostFoundId()) != null &&  //是自己的招领
+                            lostFoundMap.get(item.getLostFoundId()).getUserId().equals(user.getId())) {
                 mine.add(item.setRecordStatus(RecordStatusEnum.DELETED.getCode()));
             }
         });
