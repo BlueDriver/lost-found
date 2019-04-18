@@ -38,7 +38,7 @@ public enum ErrorEnum {
     NO_MATCH_ENUM(2401, "{}中无匹配类型{}"),
 
     //启事相关
-    LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在"),
+    LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在或已被删除"),
     ;
 
     private Integer code;

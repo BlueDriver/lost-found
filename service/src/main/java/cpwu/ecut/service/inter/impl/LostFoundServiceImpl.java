@@ -207,7 +207,8 @@ public class LostFoundServiceImpl implements LostFoundService {
     @Override
     public PublicationDetail detail(String id) throws Exception {
         Optional<LostFound> lostFoundOptional = lostFoundDAO.findById(id);
-        if (!lostFoundOptional.isPresent()) {
+        if (!lostFoundOptional.isPresent() || //不存在
+                RecordStatusEnum.DELETED.equals(lostFoundOptional.get().getRecordStatus())) {//已删除
             throw ExceptionUtils.createException(ErrorEnum.LOST_FOUND_NOT_EXISTS, id);
         }
         LostFound lostFound = lostFoundOptional.get();
