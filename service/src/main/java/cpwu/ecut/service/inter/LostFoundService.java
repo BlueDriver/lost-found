@@ -2,6 +2,7 @@ package cpwu.ecut.service.inter;
 
 import cpwu.ecut.service.dto.req.PublicationAddReq;
 import cpwu.ecut.service.dto.req.PublicationListReq;
+import cpwu.ecut.service.dto.resp.PublicationDetail;
 import cpwu.ecut.service.dto.resp.PublicationPageResp;
 
 import javax.servlet.http.HttpSession;
@@ -24,4 +25,9 @@ public interface LostFoundService {
      * 查询列表
      */
     PublicationPageResp page(PublicationListReq req, HttpSession session) throws Exception;
+
+    /**
+     *  查看启事详情
+     */
+    PublicationDetail detail(String id) throws Exception;
 }

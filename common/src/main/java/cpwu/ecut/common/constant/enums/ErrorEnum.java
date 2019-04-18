@@ -23,7 +23,7 @@ public enum ErrorEnum {
     USER_HAS_FREEZE(2003, "用户{}已被冻结"),
     VERIFY_CODE_ERROR(2004, "验证码错误"),
     USER_NOT_EXISTS(2005, "用户{}不存在"),
-    USER_LOGIN_ERROR(2006, "用户登录状态异常，请重新登录"),
+    USER_LOGIN_ERROR(2006, "登录状态异常，请重新登录"),
 
     //学校相关
     SCHOOL_NOT_EXISTS(2101, "学校{}不存在"),
@@ -35,7 +35,10 @@ public enum ErrorEnum {
     NO_PERMISSION(2301, "无此操作权限，请重试或重新登录"),
 
     //系统相关
-    NO_MATCH_ENUM(3301, "{}中无匹配类型{}"),
+    NO_MATCH_ENUM(2401, "{}中无匹配类型{}"),
+
+    //启事相关
+    LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在"),
     ;
 
     private Integer code;

@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
- * @date 2019/04/16 13:59 Tuesday
+ * @date 2019/04/17 09:30 Wednesday
  */
 @Data
 @Accessors(chain = true)
-public class PublicationItem {
+public class PublicationDetail {
     private String id;
 
     private String icon;
@@ -41,5 +41,15 @@ public class PublicationItem {
 
     private Integer lookCount;
 
-    private Long commentCount;
+    private Integer status;
+
+    private Date dealTime;
+
+    private Boolean isSelf;
+
+    private String email;
+
+    private String phoneNumber;
+
+    //private List<PublicationComment> comments;
 }

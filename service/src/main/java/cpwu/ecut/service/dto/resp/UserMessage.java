@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * lost-found
@@ -12,34 +11,23 @@ import java.util.List;
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
- * @date 2019/04/16 13:59 Tuesday
+ * @date 2019/04/17 19:13 Wednesday
  */
 @Data
 @Accessors(chain = true)
-public class PublicationItem {
+public class UserMessage {
     private String id;
 
-    private String icon;
-
-    private Integer kind;
-
     private String userId;
+
+    private String icon;
 
     private String username;
 
     private Date time;
 
-    private String location;
-
     private String title;
 
-    private String about;
+    private String content;
 
-    private List<String> images;
-
-    private String category;
-
-    private Integer lookCount;
-
-    private Long commentCount;
 }

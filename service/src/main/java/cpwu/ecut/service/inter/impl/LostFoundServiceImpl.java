@@ -6,7 +6,6 @@ import cpwu.ecut.common.utils.CommonUtils;
 import cpwu.ecut.common.utils.EnumUtils;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.dao.entity.Category;
-import cpwu.ecut.dao.entity.Comment;
 import cpwu.ecut.dao.entity.LostFound;
 import cpwu.ecut.dao.entity.User;
 import cpwu.ecut.dao.inter.CategoryDAO;
@@ -15,6 +14,7 @@ import cpwu.ecut.dao.inter.LostFoundDAO;
 import cpwu.ecut.dao.inter.UserDAO;
 import cpwu.ecut.service.dto.req.PublicationAddReq;
 import cpwu.ecut.service.dto.req.PublicationListReq;
+import cpwu.ecut.service.dto.resp.PublicationDetail;
 import cpwu.ecut.service.dto.resp.PublicationItem;
 import cpwu.ecut.service.dto.resp.PublicationPageResp;
 import cpwu.ecut.service.inter.LostFoundService;
@@ -24,6 +24,7 @@ import jetbrick.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -149,18 +150,42 @@ public class LostFoundServiceImpl implements LostFoundService {
         return resp;
     }
 
-
     private List<PublicationItem> convert(List<LostFound> lostFoundList) throws IOException {
         List<PublicationItem> list = new ArrayList<>(lostFoundList.size());
+        if (CollectionUtils.isEmpty(lostFoundList)) {
+            return list;
+        }
+
+        Set<String> userIdSet = new HashSet<>(lostFoundList.size());
+        lostFoundList.forEach(i -> userIdSet.add(i.getUserId()));
+
+        List<User> userList = userDAO.findAllById(userIdSet);
+
+        Map<String, User> userMap = new HashMap<>(userList.size());
+        userList.forEach(i -> userMap.put(i.getId(), i));
+
+        Set<String> lostIdSet = new HashSet<>(lostFoundList.size());
+        lostFoundList.forEach(i -> lostIdSet.add(i.getId()));
+
+        List<String> idList = commentDAO.findCommentIdIn(lostIdSet);
+
+        Map<String, Long> commentMap = new HashMap<>(idList.size());
+        for (String id : idList) {
+            if (commentMap.containsKey(id)) {
+                commentMap.put(id, commentMap.get(id) + 1);
+            } else {
+                commentMap.put(id, 1L);
+            }
+        }
+
         PublicationItem item;
-        Optional<User> userOptional;
         User user;
         for (LostFound lostFound : lostFoundList) {
             item = new PublicationItem();
-            item.setId(lostFound.getId());
-            userOptional = userDAO.findById(lostFound.getUserId());
-            if (userOptional.isPresent()) {
-                user = userOptional.get();
+            item.setId(lostFound.getId())
+                    .setUserId(lostFound.getUserId());
+            user = userMap.get(lostFound.getUserId());
+            if (user != null) {
                 item.setIcon(user.getIcon())
                         .setUsername(user.getUsername());
             }
@@ -172,14 +197,47 @@ public class LostFoundServiceImpl implements LostFoundService {
                     .setImages(mapper.readValue(lostFound.getImages(), List.class))
                     .setCategory(lostFound.getCategoryId())
                     .setLookCount(lostFound.getLookCount());
-
-            Comment commentEx = new Comment();
-            commentEx.setLostFoundId(lostFound.getId())
-                    .setRecordStatus(RecordStatusEnum.EXISTS.getCode());
-            item.setCommentCount(commentDAO.count(Example.of(commentEx)));
-
+            item.setCommentCount(commentMap.get(lostFound.getId()) == null ? 0L : commentMap.get(lostFound.getId()));
             list.add(item);
         }
         return list;
+    }
+
+    @Override
+    public PublicationDetail detail(String id) throws Exception {
+        Optional<LostFound> lostFoundOptional = lostFoundDAO.findById(id);
+        if (!lostFoundOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.LOST_FOUND_NOT_EXISTS, id);
+        }
+        LostFound lostFound = lostFoundOptional.get();
+
+        lostFound.setLookCount(lostFound.getLookCount() + 1);
+        lostFoundDAO.saveAndFlush(lostFound);
+
+        Optional<User> userOptional = userDAO.findById(lostFound.getUserId());
+        PublicationDetail detail = new PublicationDetail();
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            detail.setUserId(user.getId())
+                    .setIcon(user.getIcon())
+                    .setUsername(user.getUsername())
+                    .setEmail(user.getEmail())
+                    .setPhoneNumber(user.getPhoneNumber())
+                    .setIsSelf(user.getId().equals(lostFound.getUserId()));
+        }
+
+        detail.setId(lostFound.getId())
+                .setKind(lostFound.getKind())
+                .setTime(lostFound.getCreateTime())
+                .setLocation(lostFound.getLocation())
+                .setTitle(lostFound.getTitle())
+                .setAbout(lostFound.getAbout())
+                .setImages(mapper.readValue(lostFound.getImages(), List.class))
+                .setCategory(lostFound.getCategoryId())
+                .setLookCount(lostFound.getLookCount())
+                .setStatus(lostFound.getStatus())
+                .setDealTime(lostFound.getDealTime());
+
+        return detail;
     }
 }

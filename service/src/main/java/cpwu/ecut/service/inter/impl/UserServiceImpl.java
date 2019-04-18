@@ -297,6 +297,7 @@ public class UserServiceImpl implements UserService {
                 .setRealName(student.getName())
                 .setGender(student.getGender())
                 .setSchoolId(school.getSchoolId())
+                .setCampusId(school.getCampusId())
                 .setCreateTime(new Date())
                 .setKind(UserKindEnum.STUDENT.getCode())
                 .setStatus(AccountStatusEnum.PRE.getCode())
