@@ -33,13 +33,14 @@ public enum ErrorEnum {
 
     //权限相关
     NO_PERMISSION(2301, "无此操作权限，请重试或重新登录"),
+    NO_ENOUGH_PERMISSION(2302, "权限不足"),
+    PERMISSION_NOT_MATCH(2303, "用户权限不匹配"),
 
     //系统相关
     NO_MATCH_ENUM(2401, "{}中无匹配类型{}"),
 
     //启事相关
-    LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在或已被删除"),
-    ;
+    LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在或已被删除"),;
 
     private Integer code;
     private String desc;

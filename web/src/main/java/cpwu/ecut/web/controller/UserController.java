@@ -1,5 +1,11 @@
-package cpwu.ecut.web.controller.user;
+package cpwu.ecut.web.controller;
 
+import cpwu.ecut.common.constant.annotation.ActionLog;
+import cpwu.ecut.common.constant.annotation.AuthCheck;
+import cpwu.ecut.common.constant.annotation.MatchModeEnum;
+import cpwu.ecut.common.constant.annotation.ServiceEnum;
+import cpwu.ecut.common.constant.enums.ActionEnum;
+import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.service.dto.req.CommentAddReq;
 import cpwu.ecut.service.dto.req.PublicationAddReq;
 import cpwu.ecut.service.dto.req.PublicationListReq;
@@ -40,6 +46,8 @@ public class UserController {
      * 发布启事
      */
     @PostMapping("/pub")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.JUST)
+    @ActionLog(service = ServiceEnum.LOST_FUND_PUB, action = ActionEnum.CREATE)
     public ResponseDTO publicationAdd(@Valid @RequestBody PublicationAddReq req, HttpSession session) throws Exception {
         lostFoundService.add(req, session);
         return ResponseDTO.successObj();
@@ -49,6 +57,8 @@ public class UserController {
      * 分页查询启事
      */
     @PostMapping("/page")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.LOST_FOUND_PAGE, action = ActionEnum.READ)
     public ResponseDTO publicationPage(@Valid @RequestBody PublicationListReq req, HttpSession session) throws Exception {
         PublicationPageResp resp = lostFoundService.page(req, session);
         return ResponseDTO.successObj("page", resp);
@@ -58,6 +68,8 @@ public class UserController {
      * 启事详情
      */
     @PostMapping("/detail")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.LOST_FOUND_DETAIL, action = ActionEnum.READ)
     public ResponseDTO publicationDetail(@NotBlank(message = "启事id不能为空") @RequestParam String id) throws Exception {
         return ResponseDTO.successObj("item", lostFoundService.detail(id));
     }
@@ -66,6 +78,8 @@ public class UserController {
      * 启事评论列表
      */
     @PostMapping("/comments")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.COMMENT_LIST, action = ActionEnum.READ)
     public ResponseDTO commentList(@NotBlank(message = "启事id不能为空") @RequestParam String id) {
         return ResponseDTO.successObj("comments", commentService.listComment(id));
     }
@@ -74,6 +88,8 @@ public class UserController {
      * 发布评论
      */
     @PostMapping("/comment")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.JUST)
+    @ActionLog(service = ServiceEnum.COMMENT_PUB, action = ActionEnum.CREATE)
     public ResponseDTO commentAdd(@Valid @RequestBody CommentAddReq req, HttpSession session) throws Exception {
         commentService.commentAdd(req, session);
         return ResponseDTO.successObj();
@@ -83,6 +99,8 @@ public class UserController {
      * 查寻用户消息（与我相关的评论）
      */
     @PostMapping("/messages")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.COMMENT_MINE, action = ActionEnum.READ)
     public ResponseDTO messages(HttpSession session) throws Exception {
         return ResponseDTO.successObj("list", commentService.listMessage(session));
     }
@@ -91,6 +109,8 @@ public class UserController {
      * 删除启事
      */
     @PostMapping("/removeLost")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.LOST_FOUND_DELETE, action = ActionEnum.DELETE)
     public ResponseDTO removeLostFound(@Valid @RequestBody PublicationRemoveReq req, HttpSession session) throws Exception {
         lostFoundService.removeLostFound(req.getIdList(), session);
         return ResponseDTO.successObj();
@@ -100,6 +120,8 @@ public class UserController {
      * 删除评论
      */
     @PostMapping("/removeComment")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    @ActionLog(service = ServiceEnum.COMMENT_DELETE, action = ActionEnum.DELETE)
     public ResponseDTO removeComment(@Valid @RequestBody PublicationRemoveReq req, HttpSession session) throws Exception {
         commentService.removeComment(req.getIdList(), session);
         return ResponseDTO.successObj();

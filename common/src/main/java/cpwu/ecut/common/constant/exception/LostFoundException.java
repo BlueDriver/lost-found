@@ -1,10 +1,10 @@
-package cpwu.ecut.common.constant.clazz;
+package cpwu.ecut.common.constant.exception;
 
 import lombok.Getter;
 
 /**
  * lost-found
- * cpwu.ecut.common.constant.clazz
+ * cpwu.ecut.common.constant.annotation
  * 失物招领系统异常
  *
  * @author BlueDriver

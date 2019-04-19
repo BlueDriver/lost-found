@@ -1,5 +1,6 @@
 package cpwu.ecut.dao.entity;
 
+import cpwu.ecut.common.constant.annotation.ServiceEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -28,30 +29,52 @@ public class Log {
     @Column(nullable = false)
     private Long id;
     /**
+     * 服务码，一个请求（接口)对应一个
+     *
+     * @see ServiceEnum
+     */
+    @Column(nullable = false, length = 64)
+    private Integer serviceCode;
+    /**
      * 用户id
      */
     @Column(nullable = false, length = 64)
     private String userId;
     /**
-     * 动作
+     * 动作码
+     *
+     * @see cpwu.ecut.common.constant.enums.ActionEnum
      */
-    @Column(nullable = false, length = 64)
-    private String actionName;
+    @Column(nullable = false, columnDefinition = "int(11)")
+    private Integer actionCode;
     /**
      * 操作对象名
      */
-    @Column(nullable = false, length = 64)
+    @Column(nullable = true, length = 64)
     private String targetName;
     /**
      * 操作对象主键id
      */
-    @Column(nullable = false, length = 64)
+    @Column(nullable = true, length = 64)
     private String targetId;
     /**
      * 说明
      */
     @Column(nullable = true, length = 256)
     private String about;
+
+    /**
+     * 扩展
+     */
+    @Column(nullable = true, length = 256)
+    private String ip;
+
+    /**
+     * 耗时
+     */
+    @Column(nullable = false)
+    private Long timeCost;
+
     /**
      * 创建时间
      */

@@ -1,6 +1,6 @@
 package cpwu.ecut.web.handler;
 
-import cpwu.ecut.common.constant.clazz.LostFoundException;
+import cpwu.ecut.common.constant.exception.LostFoundException;
 import cpwu.ecut.service.dto.resp.base.ResponseCode;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;

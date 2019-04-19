@@ -23,9 +23,5 @@ public interface ResponseCode {
      * 参数错误Parameter error
      */
     int PARAM_INVALID = 1002;
-    /**
-     * 无权限NO permission
-     */
-    int NO_PERMISSION = 1003;
 
 }

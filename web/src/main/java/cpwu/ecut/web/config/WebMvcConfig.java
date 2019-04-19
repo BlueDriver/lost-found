@@ -1,8 +1,7 @@
 package cpwu.ecut.web.config;
 
-import cpwu.ecut.web.config.interceptor.AdminInterceptor;
 import cpwu.ecut.web.config.interceptor.DefaultInterceptor;
-import cpwu.ecut.web.config.interceptor.LoginInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,18 +19,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Bean
+    public DefaultInterceptor defaultInterceptor() {
+        return new DefaultInterceptor();
+    }
+
     /**
      * 添加拦截器
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //拦截所有
-        registry.addInterceptor(new DefaultInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(defaultInterceptor()).addPathPatterns("/**");
         //拦截指定前缀
         //管理员
-        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/api/v1/admin/**");
+        //registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/api/v1/admin/**");
         //必须登录的
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/v1/common/**", "/api/v1/user/**");
+        //registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/v1/common/**", "/api/v1/user/**");
 
         //公开的：api/v1/public/**
     }

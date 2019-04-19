@@ -1,9 +1,12 @@
-package cpwu.ecut.web.controller.common;
+package cpwu.ecut.web.controller;
 
+import cpwu.ecut.common.constant.annotation.AuthCheck;
+import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.dao.entity.User;
 import cpwu.ecut.service.dto.resp.CategoryListResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CategoryService;
+import cpwu.ecut.service.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +34,13 @@ public class CommonController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * 获得物品类别列表
+     */
     @PostMapping("/category")
-    public ResponseDTO categoryList(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    @AuthCheck(level = UserKindEnum.STUDENT)
+    public ResponseDTO categoryList(HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
         List<CategoryListResp> list = categoryService.getCategoryList(user.getSchoolId());
         return ResponseDTO.successObj("list", list);
     }

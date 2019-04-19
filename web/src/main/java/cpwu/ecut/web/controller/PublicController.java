@@ -1,5 +1,8 @@
-package cpwu.ecut.web.controller.open;
+package cpwu.ecut.web.controller;
 
+import cpwu.ecut.common.constant.annotation.ActionLog;
+import cpwu.ecut.common.constant.annotation.ServiceEnum;
+import cpwu.ecut.common.constant.enums.ActionEnum;
 import cpwu.ecut.common.constant.enums.ErrorEnum;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
@@ -81,6 +84,7 @@ public class PublicController {
      */
     @PostMapping("/recognize")
     @ResponseBody
+    @ActionLog(service = ServiceEnum.USER_REG, action = ActionEnum.CREATE)
     public ResponseDTO studentRecognize(@Valid @RequestBody StudentRecognizeReq req, HttpSession session) throws Exception {
         checkVerifyCode(session, req.getCode());
         StudentRecognizeResp resp = userService.recognizeStudent(req, session);
@@ -91,6 +95,7 @@ public class PublicController {
     /**
      * 登录
      */
+    @ActionLog(service = ServiceEnum.USER_LOGIN, action = ActionEnum.CREATE)
     @PostMapping("/login")
     @ResponseBody
     public ResponseDTO userLogin(@Valid @RequestBody UserLoginReq req, HttpSession session) throws Exception {

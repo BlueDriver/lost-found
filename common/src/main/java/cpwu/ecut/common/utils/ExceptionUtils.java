@@ -1,6 +1,6 @@
 package cpwu.ecut.common.utils;
 
-import cpwu.ecut.common.constant.clazz.LostFoundException;
+import cpwu.ecut.common.constant.exception.LostFoundException;
 import cpwu.ecut.common.constant.enums.ErrorEnum;
 import org.slf4j.helpers.MessageFormatter;
 

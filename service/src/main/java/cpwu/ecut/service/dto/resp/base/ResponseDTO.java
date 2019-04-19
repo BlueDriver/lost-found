@@ -1,6 +1,6 @@
 package cpwu.ecut.service.dto.resp.base;
 
-import cpwu.ecut.common.constant.clazz.LostFoundException;
+import cpwu.ecut.common.constant.exception.LostFoundException;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
