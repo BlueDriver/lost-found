@@ -14,6 +14,18 @@ import cpwu.ecut.common.constant.enums.ErrorEnum;
  */
 public class EnumUtils {
     /**
+     * 根据code从枚举中返回desc
+     */
+    public static String getDesc(Integer code, EnumInter[] inters) {
+        for (EnumInter en : inters) {
+            if (en.equals(code)) {
+                return en.getDesc();
+            }
+        }
+        return null;
+    }
+
+    /**
      * 从枚举中检验并返回code
      */
     public static Integer checkAndGetCode(Integer code, EnumInter[] inters) throws Exception {
@@ -25,6 +37,9 @@ public class EnumUtils {
         throw ExceptionUtils.createException(ErrorEnum.NO_MATCH_ENUM, inters.getClass().getSimpleName(), code);
     }
 
+    /**
+     * 是否包含code
+     */
     public static boolean containsCode(Integer code, EnumInter[] inters) {
         for (EnumInter en : inters) {
             if (en.equals(code)) {
