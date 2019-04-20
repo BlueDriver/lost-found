@@ -3,6 +3,7 @@ package cpwu.ecut.service.inter;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
+import cpwu.ecut.service.dto.resp.UserInfoResp;
 
 import javax.servlet.http.HttpSession;
 
@@ -30,5 +31,8 @@ public interface UserService {
      */
     StudentRecognizeResp loginUser(UserLoginReq req, HttpSession session) throws Exception;
 
-
+    /**
+     *  用户信息
+     */
+    UserInfoResp userInfo(String userId) throws Exception;
 }

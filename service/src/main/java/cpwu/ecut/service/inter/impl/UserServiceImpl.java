@@ -1,22 +1,20 @@
 package cpwu.ecut.service.inter.impl;
 
 import cpwu.ecut.common.constant.RecognizedSchool;
-import cpwu.ecut.common.constant.enums.AccountStatusEnum;
-import cpwu.ecut.common.constant.enums.ErrorEnum;
-import cpwu.ecut.common.constant.enums.RecordStatusEnum;
-import cpwu.ecut.common.constant.enums.UserKindEnum;
+import cpwu.ecut.common.constant.enums.*;
 import cpwu.ecut.common.utils.CommonUtils;
+import cpwu.ecut.common.utils.EnumUtils;
 import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.dao.entity.School;
 import cpwu.ecut.dao.entity.Student;
 import cpwu.ecut.dao.entity.User;
-import cpwu.ecut.dao.inter.ManagerDAO;
 import cpwu.ecut.dao.inter.SchoolDAO;
 import cpwu.ecut.dao.inter.StudentDAO;
 import cpwu.ecut.dao.inter.UserDAO;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
+import cpwu.ecut.service.dto.resp.UserInfoResp;
 import cpwu.ecut.service.inter.UserService;
 import cpwu.ecut.service.utils.MailSenderService;
 import cpwu.ecut.service.utils.VPNUtils;
@@ -73,8 +71,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailSenderService mailSenderService;
 
-    @Autowired
-    private ManagerDAO managerDAO;
 
     /**
      * 认证登录
@@ -338,5 +334,35 @@ public class UserServiceImpl implements UserService {
         mailSenderService.sendTemplateMessage(user.getEmail(), param,
                 "templates/mail/userActivate.html", "账号激活通知",
                 systemEmail, appName);
+    }
+
+
+    /**
+     * 用户信息
+     */
+    @Override
+    public UserInfoResp userInfo(String userId) throws Exception {
+        Optional<Student> studentOptional = studentDAO.findByUserIdEquals(userId);
+        Optional<User> userOptional = userDAO.findById(userId);
+        if (!studentOptional.isPresent() || !userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
+        }
+
+        Student student = studentOptional.get();
+        User user = userOptional.get();
+        UserInfoResp resp = new UserInfoResp();
+        resp.setName(student.getName())
+                .setUsername(student.getStudentNum())
+                .setGender(GenderEnum.MALE.equals(student.getGender()) ?
+                        GenderEnum.MALE.getDesc() : GenderEnum.FEMALE.getDesc())
+                .setEmail(user.getEmail())
+                .setPhoneNumber(user.getPhoneNumber())
+                .setClassNum(student.getClassNum())
+                .setMajor(student.getMajor())
+                .setAcademy(student.getAcademy())
+                .setCampus(student.getCampusName())
+                .setLastLogin(user.getLastLogin())
+                .setStatus(EnumUtils.getDesc(user.getStatus(), AccountStatusEnum.values()));
+        return resp;
     }
 }
