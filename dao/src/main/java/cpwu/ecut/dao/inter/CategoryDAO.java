@@ -17,4 +17,6 @@ import org.springframework.stereotype.Repository;
 public interface CategoryDAO extends JpaRepository<Category, CategoryKey> {
 
     Category findByNameEquals(String name);
+
+    Category findByNameEqualsAndTargetIdEquals(String name, String targetId);
 }

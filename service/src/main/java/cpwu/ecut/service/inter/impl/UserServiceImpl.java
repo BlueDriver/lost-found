@@ -353,8 +353,7 @@ public class UserServiceImpl implements UserService {
         UserInfoResp resp = new UserInfoResp();
         resp.setName(student.getName())
                 .setUsername(student.getStudentNum())
-                .setGender(GenderEnum.MALE.equals(student.getGender()) ?
-                        GenderEnum.MALE.getDesc() : GenderEnum.FEMALE.getDesc())
+                .setGender(EnumUtils.getDesc(student.getGender(), GenderEnum.values()))
                 .setEmail(user.getEmail())
                 .setPhoneNumber(user.getPhoneNumber())
                 .setClassNum(student.getClassNum())
@@ -364,5 +363,16 @@ public class UserServiceImpl implements UserService {
                 .setLastLogin(user.getLastLogin())
                 .setStatus(EnumUtils.getDesc(user.getStatus(), AccountStatusEnum.values()));
         return resp;
+    }
+
+    @Override
+    public void freezeUser(String userId) throws Exception {
+        Optional<User> userOptional = userDAO.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
+        }
+        User user = userOptional.get();
+        user.setStatus(AccountStatusEnum.FREEZE.getCode());
+        userDAO.saveAndFlush(user);
     }
 }

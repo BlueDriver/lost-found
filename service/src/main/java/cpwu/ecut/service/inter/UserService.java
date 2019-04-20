@@ -35,4 +35,6 @@ public interface UserService {
      *  用户信息
      */
     UserInfoResp userInfo(String userId) throws Exception;
+
+    void freezeUser(String userId) throws Exception;
 }

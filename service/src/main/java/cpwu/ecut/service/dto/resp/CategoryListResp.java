@@ -45,4 +45,6 @@ public class CategoryListResp {
      * 作用对象id系统级别为“system”
      */
     private String targetId;
+
+    private Long count;
 }

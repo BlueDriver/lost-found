@@ -1,6 +1,7 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -19,11 +20,13 @@ public class CategoryAddReq {
     /**
      * 类型名
      */
-    @NotBlank(message = "类型名称不能为空空")
+    @NotBlank(message ="类型名称不能为空空")
+    @Length(min = 1, max = 128, message = "类别名称长度必须在1-128之间")
     private String name;
     /**
      * 说明
      */
+    @Length(min = 1, max = 256, message = "类别说明长度必须在1-256之间")
     private String about;
     /**
      * 图标
