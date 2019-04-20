@@ -27,6 +27,8 @@ public class PublicationDetail {
 
     private String username;
 
+    private String realName;
+
     private Date time;
 
     private String location;

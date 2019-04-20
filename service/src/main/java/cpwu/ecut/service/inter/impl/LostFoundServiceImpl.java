@@ -188,7 +188,8 @@ public class LostFoundServiceImpl implements LostFoundService {
             user = userMap.get(lostFound.getUserId());
             if (user != null) {
                 item.setIcon(user.getIcon())
-                        .setUsername(user.getUsername());
+                        .setUsername(user.getUsername())
+                        .setRealName(user.getRealName());
             }
             item.setKind(lostFound.getKind())
                     .setTime(lostFound.getCreateTime())
@@ -223,6 +224,7 @@ public class LostFoundServiceImpl implements LostFoundService {
             detail.setUserId(user.getId())
                     .setIcon(user.getIcon())
                     .setUsername(user.getUsername())
+                    .setRealName(user.getRealName())
                     .setEmail(user.getEmail())
                     .setPhoneNumber(user.getPhoneNumber())
                     .setIsSelf(user.getId().equals(lostFound.getUserId()));

@@ -10,6 +10,7 @@ import cpwu.ecut.common.utils.ExceptionUtils;
 import cpwu.ecut.dao.entity.School;
 import cpwu.ecut.dao.entity.Student;
 import cpwu.ecut.dao.entity.User;
+import cpwu.ecut.dao.inter.ManagerDAO;
 import cpwu.ecut.dao.inter.SchoolDAO;
 import cpwu.ecut.dao.inter.StudentDAO;
 import cpwu.ecut.dao.inter.UserDAO;
@@ -71,6 +72,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MailSenderService mailSenderService;
+
+    @Autowired
+    private ManagerDAO managerDAO;
 
     /**
      * 认证登录
@@ -224,8 +228,14 @@ public class UserServiceImpl implements UserService {
         School school = schoolOptional.get();
 
         User userEx = new User();
-        userEx.setUsername(req.getUsername())
-                .setSchoolId(req.getSchoolId());
+
+        if (CommonUtils.isEmail(req.getUsername())) {//邮箱
+            userEx.setEmail(req.getUsername());//管理员
+        } else {
+            userEx.setUsername(req.getUsername());//学生
+        }
+        userEx.setSchoolId(req.getSchoolId());
+
         Optional<User> userOptional = userDAO.findOne(Example.of(userEx));
         //用户不存在
         if (!userOptional.isPresent()) {
@@ -257,8 +267,8 @@ public class UserServiceImpl implements UserService {
             //session设置
             session.setAttribute("user", user);
             session.setAttribute("school", school);
-            //返回
 
+            //返回
             StudentRecognizeResp resp = new StudentRecognizeResp();
             resp.setIcon(user.getIcon())
                     .setRealName(user.getRealName())
@@ -266,9 +276,16 @@ public class UserServiceImpl implements UserService {
                     .setSchoolName(school.getSchoolName())
                     .setKind(user.getKind())
                     .setEmail(user.getEmail())
+                    .setPhoneNumber(user.getPhoneNumber())
                     .setGender(user.getGender())
                     .setCreateTime(user.getCreateTime())
                     .setLastLogin(user.getLastLogin());
+
+            if (UserKindEnum.MANAGER.equals(user.getKind())) {//管理员
+                resp.setIcon(school.getIcon());
+            }
+
+
             return resp;
         } else if (AccountStatusEnum.FREEZE.equals(user.getStatus())) {
             //冻结

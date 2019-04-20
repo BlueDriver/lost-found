@@ -23,6 +23,7 @@ public class StudentRecognizeResp {
     private String schoolName;
     private Integer kind;
     private String email;
+    private String phoneNumber;
     private Integer gender;
     private String createTime;
     private String lastLogin;

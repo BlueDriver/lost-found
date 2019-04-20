@@ -181,4 +181,13 @@ public class CommonUtils {
     public static String replaceString(String source, int start, int end) {
         return replaceString(source, start, end, "*");
     }
+
+    private static final String emailRegex = "\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}";
+
+    /**
+     * 校验是否为邮箱
+     */
+    public static boolean isEmail(String s) {
+        return s.matches(emailRegex);
+    }
 }
