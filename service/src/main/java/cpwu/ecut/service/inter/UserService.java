@@ -52,4 +52,10 @@ public interface UserService {
      * 解冻用户
      */
     void unfreezeUser(String userId) throws Exception;
+
+    /**
+     * 用户设置为管理员
+     */
+    void setAsAdmin(String userId) throws Exception;
+
 }

@@ -445,4 +445,18 @@ public class UserServiceImpl implements UserService {
         user.setStatus(AccountStatusEnum.NORMAL.getCode());
         userDAO.saveAndFlush(user);
     }
+
+    /**
+     * 设置用户为管理员
+     */
+    @Override
+    public void setAsAdmin(String userId) throws Exception {
+        Optional<User> userOptional = userDAO.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
+        }
+        User user = userOptional.get();
+        user.setKind(UserKindEnum.MANAGER.getCode());
+        userDAO.saveAndFlush(user);
+    }
 }

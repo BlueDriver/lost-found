@@ -69,6 +69,15 @@ public class AdminController {
         return ResponseDTO.successObj();
     }
 
+    /**
+     * 用户设置为管理员
+     */
+    @PostMapping("/setAsAdmin")
+    public ResponseDTO setAsAdmin(@NotBlank(message = "用户id不能空") @RequestParam String userId) throws Exception {
+        userService.setAsAdmin(userId);
+        return ResponseDTO.successObj();
+    }
+
 
     /**
      * 新增类别
