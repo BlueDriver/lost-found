@@ -16,6 +16,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class UserInfoResp {
+    private String userId;
     private String name;
     private String username;
     private String gender;

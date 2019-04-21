@@ -3,6 +3,7 @@ package cpwu.ecut.web.controller;
 import cpwu.ecut.common.constant.annotation.AuthCheck;
 import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.service.dto.req.CategoryAddReq;
+import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CategoryService;
 import cpwu.ecut.service.inter.UserService;
@@ -43,6 +44,14 @@ public class AdminController {
     }
 
     /**
+     * 查看用户信息列表
+     */
+    @PostMapping("/userList")
+    public ResponseDTO userInfo(@Valid @RequestBody UserInfoListReq req, HttpSession session) throws Exception {
+        return ResponseDTO.successObj("page", userService.userList(req, session));
+    }
+
+    /**
      * 冻结用户
      */
     @PostMapping("/freezeUser")
@@ -50,6 +59,16 @@ public class AdminController {
         userService.freezeUser(userId);
         return ResponseDTO.successObj();
     }
+
+    /**
+     * 解冻用户
+     */
+    @PostMapping("/unfreezeUser")
+    public ResponseDTO unfreezeUser(@NotBlank(message = "用户id不能空") @RequestParam String userId) throws Exception {
+        userService.unfreezeUser(userId);
+        return ResponseDTO.successObj();
+    }
+
 
     /**
      * 新增类别

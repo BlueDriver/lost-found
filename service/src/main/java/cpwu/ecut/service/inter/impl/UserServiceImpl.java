@@ -12,16 +12,21 @@ import cpwu.ecut.dao.inter.SchoolDAO;
 import cpwu.ecut.dao.inter.StudentDAO;
 import cpwu.ecut.dao.inter.UserDAO;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
+import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
+import cpwu.ecut.service.dto.resp.UserInfoListResp;
 import cpwu.ecut.service.dto.resp.UserInfoResp;
 import cpwu.ecut.service.inter.UserService;
 import cpwu.ecut.service.utils.MailSenderService;
+import cpwu.ecut.service.utils.SessionUtils;
 import cpwu.ecut.service.utils.VPNUtils;
 import cpwu.ecut.service.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,10 +34,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * lost-found
@@ -351,7 +353,8 @@ public class UserServiceImpl implements UserService {
         Student student = studentOptional.get();
         User user = userOptional.get();
         UserInfoResp resp = new UserInfoResp();
-        resp.setName(student.getName())
+        resp.setUserId(user.getId())
+                .setName(student.getName())
                 .setUsername(student.getStudentNum())
                 .setGender(EnumUtils.getDesc(student.getGender(), GenderEnum.values()))
                 .setEmail(user.getEmail())
@@ -365,6 +368,59 @@ public class UserServiceImpl implements UserService {
         return resp;
     }
 
+    /**
+     * 查询学生信息列表
+     */
+    @Override
+    public UserInfoListResp userList(UserInfoListReq req, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        Page<Student> studentPage;
+        //keyword不空
+        //if (!StringUtils.isEmpty(req.getKeyword())) {
+        studentPage = studentDAO.findStudentByKeyword(req.getKeyword().trim(), user.getSchoolId(),
+                PageRequest.of(req.getPageNum() < 0 ? 0 : req.getPageNum(), req.getPageSize()));
+        //}
+        Set<String> userIdSet = new HashSet<>(studentPage.getNumberOfElements());
+        Map<String, User> userMap = new HashMap<>(studentPage.getNumberOfElements());
+        if (studentPage.hasContent()) {
+            studentPage.forEach(item -> userIdSet.add(item.getUserId()));
+            List<User> userList = userDAO.findAllById(userIdSet);
+            userList.forEach(item -> userMap.put(item.getId(), item));
+        }
+        List<UserInfoResp> list = new ArrayList<>(studentPage.getNumberOfElements());
+        UserInfoResp resp;
+        User u;
+        for (Student student : studentPage) {
+            resp = new UserInfoResp();
+            resp.setUserId(student.getUserId())
+                    .setName(student.getName())
+                    .setUsername(student.getStudentNum())
+                    .setGender(EnumUtils.getDesc(student.getGender(), GenderEnum.values()))
+                    .setClassNum(student.getClassNum())
+                    .setMajor(student.getMajor())
+                    .setAcademy(student.getAcademy())
+                    .setCampus(student.getCampusName());
+            u = userMap.get(student.getUserId());
+            if (u != null) {
+                resp.setLastLogin(u.getLastLogin())
+                        .setEmail(u.getEmail())
+                        .setPhoneNumber(u.getPhoneNumber())
+                        .setStatus(EnumUtils.getDesc(u.getStatus(), AccountStatusEnum.values()));
+            }
+            list.add(resp);
+        }
+        UserInfoListResp infoListResp = new UserInfoListResp();
+        infoListResp.setList(list)
+                .setPageNum(studentPage.getNumber())
+                .setPageSize(studentPage.getSize())
+                .setTotal(studentPage.getTotalElements())
+                .setTotalPage(studentPage.getTotalPages());
+        return infoListResp;
+    }
+
+    /**
+     * 冻结用户
+     */
     @Override
     public void freezeUser(String userId) throws Exception {
         Optional<User> userOptional = userDAO.findById(userId);
@@ -373,6 +429,20 @@ public class UserServiceImpl implements UserService {
         }
         User user = userOptional.get();
         user.setStatus(AccountStatusEnum.FREEZE.getCode());
+        userDAO.saveAndFlush(user);
+    }
+
+    /**
+     * 解冻用户
+     */
+    @Override
+    public void unfreezeUser(String userId) throws Exception {
+        Optional<User> userOptional = userDAO.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
+        }
+        User user = userOptional.get();
+        user.setStatus(AccountStatusEnum.NORMAL.getCode());
         userDAO.saveAndFlush(user);
     }
 }

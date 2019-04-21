@@ -1,8 +1,10 @@
 package cpwu.ecut.service.inter;
 
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
+import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
 import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
+import cpwu.ecut.service.dto.resp.UserInfoListResp;
 import cpwu.ecut.service.dto.resp.UserInfoResp;
 
 import javax.servlet.http.HttpSession;
@@ -32,9 +34,22 @@ public interface UserService {
     StudentRecognizeResp loginUser(UserLoginReq req, HttpSession session) throws Exception;
 
     /**
-     *  用户信息
+     * 查询单个用户信息
      */
     UserInfoResp userInfo(String userId) throws Exception;
 
+    /**
+     * 用户信息列表
+     */
+    UserInfoListResp userList(UserInfoListReq req, HttpSession session) throws Exception;
+
+    /**
+     * 冻结用户
+     */
     void freezeUser(String userId) throws Exception;
+
+    /**
+     * 解冻用户
+     */
+    void unfreezeUser(String userId) throws Exception;
 }
