@@ -459,4 +459,15 @@ public class UserServiceImpl implements UserService {
         user.setKind(UserKindEnum.MANAGER.getCode());
         userDAO.saveAndFlush(user);
     }
+
+    /**
+     * 设置手机号
+     */
+    @Override
+    public String setPhoneNumber(String phoneNumber, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        user.setPhoneNumber(phoneNumber);
+        userDAO.saveAndFlush(user);
+        return user.getPhoneNumber();
+    }
 }

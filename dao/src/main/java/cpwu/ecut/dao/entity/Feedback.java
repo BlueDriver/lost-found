@@ -66,9 +66,10 @@ public class Feedback {
      * 状态
      * 0：未读
      * 1：已读
+     * @see cpwu.ecut.common.constant.enums.MessageStatusEnum
      */
     @Column(nullable = false, columnDefinition = "int(11) default 0")
-    private String status;
+    private Integer status;
     /**
      * 处理人id
      */

@@ -6,14 +6,14 @@ import cpwu.ecut.common.constant.annotation.MatchModeEnum;
 import cpwu.ecut.common.constant.annotation.ServiceEnum;
 import cpwu.ecut.common.constant.enums.ActionEnum;
 import cpwu.ecut.common.constant.enums.UserKindEnum;
-import cpwu.ecut.service.dto.req.CommentAddReq;
-import cpwu.ecut.service.dto.req.PublicationAddReq;
-import cpwu.ecut.service.dto.req.PublicationListReq;
-import cpwu.ecut.service.dto.req.PublicationRemoveReq;
+import cpwu.ecut.service.dto.req.*;
 import cpwu.ecut.service.dto.resp.PublicationPageResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CommentService;
+import cpwu.ecut.service.inter.FeedbackService;
 import cpwu.ecut.service.inter.LostFoundService;
+import cpwu.ecut.service.inter.UserService;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +42,12 @@ public class UserController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private UserService userService;
+
     /**
      * 发布启事
      */
@@ -68,8 +74,8 @@ public class UserController {
      * 启事详情
      */
     @PostMapping("/detail")
-    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
-    @ActionLog(service = ServiceEnum.LOST_FOUND_DETAIL, action = ActionEnum.READ)
+    //@AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    //@ActionLog(service = ServiceEnum.LOST_FOUND_DETAIL, action = ActionEnum.READ)
     public ResponseDTO publicationDetail(@NotBlank(message = "启事id不能为空") @RequestParam String id) throws Exception {
         return ResponseDTO.successObj("item", lostFoundService.detail(id));
     }
@@ -127,4 +133,27 @@ public class UserController {
         return ResponseDTO.successObj();
     }
 
+    /**
+     * 新增反馈
+     */
+    @PostMapping("/addFeedback")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    //@ActionLog(service = ServiceEnum.COMMENT_DELETE, action = ActionEnum.DELETE)
+    public ResponseDTO addFeedback(@Valid @RequestBody FeedbackAddReq req, HttpSession session) throws Exception {
+        feedbackService.addFeedback(req, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
+     * 设置手机号
+     */
+    @PostMapping("/setPhone")
+    @AuthCheck(level = UserKindEnum.STUDENT)
+    public ResponseDTO setPhoneNumber(@NotBlank(message = "手机号不能为空")
+                                      @Length(min = 5, max = 16, message = "手机号长度必须在5-16位")
+                                      @RequestParam String phone,
+                                      HttpSession session) throws Exception {
+        return ResponseDTO.successObj("phone", userService.setPhoneNumber(phone, session));
+
+    }
 }
