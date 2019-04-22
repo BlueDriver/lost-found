@@ -123,7 +123,7 @@ public class Notice {
      * todo: 4/15/2019,015 09:41 AM
      * 定时任务
      */
-    private String status;
+    private Integer status;
     /**
      * 记录状态：0：已删除1：有效
      *

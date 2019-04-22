@@ -110,8 +110,6 @@ public class CategoryServiceImpl implements CategoryService {
         if (category == null) {
             throw ExceptionUtils.createException(ErrorEnum.CATEGORY_NOT_EXISTS, name);
         }
-        category.setRecordStatus(RecordStatusEnum.DELETED.getCode());
-        categoryDAO.saveAndFlush(category);
-
+        categoryDAO.delete(category);
     }
 }

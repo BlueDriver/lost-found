@@ -20,13 +20,13 @@ public class CategoryAddReq {
     /**
      * 类型名
      */
-    @NotBlank(message ="类型名称不能为空空")
+    @NotBlank(message = "类型名称不能为空空")
     @Length(min = 1, max = 128, message = "类别名称长度必须在1-128之间")
     private String name;
     /**
      * 说明
      */
-    @Length(min = 1, max = 256, message = "类别说明长度必须在1-256之间")
+    @Length(min = 0, max = 256, message = "类别说明长度必须在0-256之间")
     private String about;
     /**
      * 图标

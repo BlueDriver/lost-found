@@ -6,6 +6,7 @@ import cpwu.ecut.dao.entity.User;
 import cpwu.ecut.service.dto.resp.CategoryListResp;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CategoryService;
+import cpwu.ecut.service.inter.NoticeService;
 import cpwu.ecut.service.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,8 @@ public class CommonController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private NoticeService noticeService;
 
     /**
      * 获得物品类别列表
@@ -43,6 +46,15 @@ public class CommonController {
         User user = SessionUtils.checkAndGetUser(session);
         List<CategoryListResp> list = categoryService.getCategoryList(user.getSchoolId());
         return ResponseDTO.successObj("list", list);
+    }
+
+    /**
+     * 获取通知列表
+     */
+    @PostMapping("/noticeList")
+    @AuthCheck(level = UserKindEnum.STUDENT)
+    public ResponseDTO noticeList(HttpSession session) throws Exception {
+        return ResponseDTO.successObj("list", noticeService.noticeList(session));
     }
 
 }

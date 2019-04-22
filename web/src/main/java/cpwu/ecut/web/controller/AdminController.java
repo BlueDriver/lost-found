@@ -3,9 +3,11 @@ package cpwu.ecut.web.controller;
 import cpwu.ecut.common.constant.annotation.AuthCheck;
 import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.service.dto.req.CategoryAddReq;
+import cpwu.ecut.service.dto.req.NoticeAddReq;
 import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CategoryService;
+import cpwu.ecut.service.inter.NoticeService;
 import cpwu.ecut.service.inter.UserService;
 import cpwu.ecut.service.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,37 @@ public class AdminController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private NoticeService noticeService;
+
+    /**
+     * 新增通知
+     */
+    @PostMapping("/noticeAdd")
+    public ResponseDTO addNotice(@RequestBody @Valid NoticeAddReq req, HttpSession session) throws Exception {
+        noticeService.noticeAdd(req, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
+     * 删除通知
+     */
+    @PostMapping("/noticeDelete")
+    public ResponseDTO deleteNotice(@NotBlank(message = "通知id不能为空") @RequestParam String id) throws Exception {
+        noticeService.noticeDelete(id);
+        return ResponseDTO.successObj();
+    }
+
+    /**
+     * 通知置顶切换
+     */
+    @PostMapping("/noticeSwitch")
+    public ResponseDTO switchNotice(@NotBlank(message = "通知id不能为空") @RequestParam String id) throws Exception {
+        noticeService.noticeSwitch(id);
+        return ResponseDTO.successObj();
+    }
+
 
     /**
      * 查看用户信息
