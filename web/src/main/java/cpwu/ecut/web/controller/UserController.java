@@ -156,4 +156,17 @@ public class UserController {
         return ResponseDTO.successObj("phone", userService.setPhoneNumber(phone, session));
 
     }
+
+    /**
+     * 设置头像
+     */
+    @PostMapping("/setIcon")
+    @AuthCheck(level = UserKindEnum.STUDENT)
+    public ResponseDTO setIcon(@NotBlank(message = "头像不能为空")
+                               @RequestBody String icon,
+                               HttpSession session) throws Exception {
+        return ResponseDTO.successObj("icon", userService.setIcon(icon, session));
+    }
+
+
 }

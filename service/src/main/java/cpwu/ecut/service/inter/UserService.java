@@ -57,9 +57,15 @@ public interface UserService {
      * 用户设置为管理员
      */
     void setAsAdmin(String userId) throws Exception;
+
     /**
      * 设置手机号
      */
     String setPhoneNumber(String phoneNumber, HttpSession session) throws Exception;
+
+    /**
+     * 修改头像
+     */
+    String setIcon(String icon, HttpSession session) throws Exception;
 
 }

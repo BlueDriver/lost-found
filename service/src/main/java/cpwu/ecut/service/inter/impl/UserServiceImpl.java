@@ -18,10 +18,8 @@ import cpwu.ecut.service.dto.resp.StudentRecognizeResp;
 import cpwu.ecut.service.dto.resp.UserInfoListResp;
 import cpwu.ecut.service.dto.resp.UserInfoResp;
 import cpwu.ecut.service.inter.UserService;
-import cpwu.ecut.service.utils.MailSenderService;
-import cpwu.ecut.service.utils.SessionUtils;
-import cpwu.ecut.service.utils.VPNUtils;
-import cpwu.ecut.service.utils.VerifyCodeUtils;
+import cpwu.ecut.service.utils.*;
+import jetbrick.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
@@ -73,6 +71,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailSenderService mailSenderService;
 
+    @Autowired
+    private ImageUtils imageUtils;
 
     /**
      * 认证登录
@@ -469,5 +469,22 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(phoneNumber);
         userDAO.saveAndFlush(user);
         return user.getPhoneNumber();
+    }
+
+    /**
+     * 修改头像
+     */
+    @Override
+    public String setIcon(String icon, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        icon = imageUtils.getBase64Image(icon);
+        if (StringUtils.isEmpty(icon)) {
+            return null;
+        }
+        Base64.Decoder decoder = Base64.getDecoder();
+        String fileName = imageUtils.copyFileToResource(decoder.decode(icon)).getFilename();
+        user.setIcon(fileName);
+        userDAO.saveAndFlush(user);
+        return fileName;
     }
 }
