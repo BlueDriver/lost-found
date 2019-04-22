@@ -41,11 +41,27 @@ public class Feedback {
      */
     @Column(nullable = true, length = 64)
     private String targetId;
+
+    /**
+     * 学校id
+     */
+    @Column(nullable = false, length = 64)
+    private String schoolId;
     /**
      * 用户id
      */
     @Column(nullable = false, length = 64)
     private String userId;
+    /**
+     * 用户名（学号）
+     */
+    @Column(nullable = false, length = 64)
+    private String username;
+    /**
+     * 真名
+     */
+    @Column(nullable = false, length = 256)
+    private String realName;
     /**
      * 主题
      */
@@ -66,6 +82,7 @@ public class Feedback {
      * 状态
      * 0：未读
      * 1：已读
+     *
      * @see cpwu.ecut.common.constant.enums.MessageStatusEnum
      */
     @Column(nullable = false, columnDefinition = "int(11) default 0")
@@ -75,6 +92,17 @@ public class Feedback {
      */
     @Column(nullable = true, length = 64)
     private String handlerId;
+
+    /**
+     * 处理人姓名
+     */
+    @Column(nullable = true, length = 256)
+    private String handlerName;
+    /**
+     * 处理人邮箱
+     */
+    @Column(nullable = true, length = 256)
+    private String handlerEmail;
     /**
      * 回复内容
      */
@@ -85,7 +113,7 @@ public class Feedback {
      */
     @Column(nullable = true)
     @Temporal(value = TemporalType.TIMESTAMP)
-    private Date handleTime;
+    private Date handlerTime;
     /**
      * /**
      * 记录状态：0：已删除1：有效

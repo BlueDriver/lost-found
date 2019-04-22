@@ -3,10 +3,12 @@ package cpwu.ecut.web.controller;
 import cpwu.ecut.common.constant.annotation.AuthCheck;
 import cpwu.ecut.common.constant.enums.UserKindEnum;
 import cpwu.ecut.service.dto.req.CategoryAddReq;
+import cpwu.ecut.service.dto.req.FeedbackReplyReq;
 import cpwu.ecut.service.dto.req.NoticeAddReq;
 import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.resp.base.ResponseDTO;
 import cpwu.ecut.service.inter.CategoryService;
+import cpwu.ecut.service.inter.FeedbackService;
 import cpwu.ecut.service.inter.NoticeService;
 import cpwu.ecut.service.inter.UserService;
 import cpwu.ecut.service.utils.SessionUtils;
@@ -39,6 +41,9 @@ public class AdminController {
 
     @Autowired
     private NoticeService noticeService;
+
+    @Autowired
+    private FeedbackService feedbackService;
 
     /**
      * 新增通知
@@ -131,5 +136,42 @@ public class AdminController {
         return ResponseDTO.successObj();
     }
 
+
+    /**
+     * 反馈列表查询
+     */
+    @PostMapping("/listFeedback")
+    public ResponseDTO listFeedback(HttpSession session) throws Exception {
+        return ResponseDTO.successObj("list", feedbackService.listFeedback(session));
+    }
+
+    /**
+     * 回复反馈
+     */
+    @PostMapping("/replyFeedback")
+    public ResponseDTO replyFeedback(@Valid @RequestBody FeedbackReplyReq req, HttpSession session) throws Exception {
+        feedbackService.replyFeedback(req, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
+     * 反馈标记已读
+     */
+    @PostMapping("/markFeedback")
+    public ResponseDTO markFeedback(@NotBlank(message = "反馈id不能为空") @RequestParam String id, HttpSession session)
+            throws Exception {
+        feedbackService.markFeedback(id, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
+     * 删除反馈
+     */
+    @PostMapping("/deleteFeedback")
+    public ResponseDTO deleteFeedback(@NotBlank(message = "反馈id不能为空") @RequestParam String id, HttpSession session)
+            throws Exception {
+        feedbackService.deleteFeedback(id, session);
+        return ResponseDTO.successObj();
+    }
 
 }

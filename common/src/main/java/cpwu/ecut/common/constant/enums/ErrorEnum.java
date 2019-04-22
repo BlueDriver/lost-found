@@ -45,7 +45,9 @@ public enum ErrorEnum {
 
     //通知相关
     NOTICE_NOT_EXISTS(2601, "通知{}不存在或已删除"),
-    ;
+
+    //反馈相关
+    FEEDBACK_NOT_EXISTS(2701, "反馈{}不存在"),;
 
     private Integer code;
     private String desc;
