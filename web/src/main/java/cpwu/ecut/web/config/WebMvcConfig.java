@@ -32,13 +32,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         //拦截所有
         registry.addInterceptor(defaultInterceptor()).addPathPatterns("/**");
-        //拦截指定前缀
-        //管理员
-        //registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/api/v1/admin/**");
-        //必须登录的
-        //registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/v1/common/**", "/api/v1/user/**");
-
-        //公开的：api/v1/public/**
     }
 
     /**

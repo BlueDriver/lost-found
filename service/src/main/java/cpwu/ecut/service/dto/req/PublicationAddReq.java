@@ -1,14 +1,18 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
  * lost-found
  * cpwu.ecut.service.dto.req
+ * 新增启事req
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -16,6 +20,7 @@ import java.util.List;
  */
 @Data
 @Validated
+@NoArgsConstructor
 public class PublicationAddReq {
     @NotNull
     private Integer applyKind;

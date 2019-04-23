@@ -113,15 +113,12 @@ public class Notice {
      * 1：正常
      * 2：未开始
      * 3：已过期
-     *
+     * <p>
      * 定时器执行状态更新
-     *
+     * todo: 4/15/2019,015 09:41 AM
+     * 定时任务更新状态
      *
      * @see cpwu.ecut.common.constant.enums.EffectEnum
-     */
-    /**
-     * todo: 4/15/2019,015 09:41 AM
-     * 定时任务
      */
     private Integer status;
     /**

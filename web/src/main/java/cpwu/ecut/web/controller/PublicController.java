@@ -31,7 +31,7 @@ import java.io.IOException;
 /**
  * lost-found
  * cpwu.ecut.web.controller.common
- * 公共接口，无访问权限限制
+ * 开放接口
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

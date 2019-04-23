@@ -46,6 +46,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserDAO userDAO;
 
+    /**
+     * 查询评论列表
+     */
     @Override
     public List<PublicationComment> listComment(String id) {
         Comment commentEx = new Comment();

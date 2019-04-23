@@ -1,6 +1,7 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Email;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * lost-found
  * cpwu.ecut.service.dto.req
+ * 学生认证
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @Validated
+@NoArgsConstructor
 public class StudentRecognizeReq {
     @NotBlank(message = "学校id不能为空")
     private String schoolId;

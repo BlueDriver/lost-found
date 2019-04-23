@@ -8,6 +8,7 @@ import java.util.Date;
 /**
  * lost-found
  * cpwu.ecut.service.dto.resp
+ * 用户的消息（于我相关的评论）
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

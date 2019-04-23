@@ -25,7 +25,9 @@ public @interface ActionLog {
     ServiceEnum service();
 
     /**
-     * 动作
+     * 动作（CURD）
+     *
+     * @see ActionEnum
      */
     ActionEnum action();
 

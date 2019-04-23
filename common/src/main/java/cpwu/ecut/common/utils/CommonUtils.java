@@ -17,6 +17,7 @@ import java.util.UUID;
 /**
  * parent
  * demo.web.utils
+ * 公共工具类
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -48,13 +49,19 @@ public class CommonUtils {
     }
 
 
-    private static SimpleDateFormat sdfFull = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdfFull = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * 获得当前时间yyyy-MM-dd HH:mm:ss
+     */
     public static String getFormatDateTimeNow() {
         return sdfFull.format(System.currentTimeMillis());
 
     }
 
+    /**
+     * 格式化Date为yyyy-MM-dd HH:mm:ss
+     */
     public static String getFormatDateTime(Date date) {
         return sdfFull.format(date);
     }
@@ -68,7 +75,7 @@ public class CommonUtils {
         return sdfFull.format(timeStamp);
     }
 
-    private static SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * <P>将年月日字符串转成Date </p>
@@ -89,6 +96,9 @@ public class CommonUtils {
         return date;
     }
 
+    /**
+     * 将Date转yyyy-MM-dd
+     */
     public static String getDateStringByDate(Date date) {
         if (date == null) {
             return null;
@@ -102,7 +112,7 @@ public class CommonUtils {
     }
 
     /**
-     * 生成32位的UUID
+     * 生成32位的UUID（去除-）
      * 8-4-4-4-12
      */
     public static String getUUID() {
@@ -156,6 +166,9 @@ public class CommonUtils {
 
     /**
      * 保留前几个和后几个字符，其他部分被替换
+     * 用户隐私性文本处理
+     * 如手机号：15911112222
+     * 处理后为：159*****222
      *
      * @param source      源字符串
      * @param before      前几个将被保留
@@ -176,7 +189,9 @@ public class CommonUtils {
     }
 
     /**
-     * 以星号替换部分字符
+     * 以*号替换部分字符
+     *
+     * @see CommonUtils#replaceString(String, int, int, String)
      */
     public static String replaceString(String source, int start, int end) {
         return replaceString(source, start, end, "*");

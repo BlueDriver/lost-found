@@ -19,6 +19,9 @@ import java.util.Set;
  */
 @Repository
 public interface CommentDAO extends JpaRepository<Comment, String> {
+    /**
+     * 查找指定失物招领id的评论
+     */
     List<Comment> findAllByLostFoundIdIn(Iterable<String> list);
 
     /**

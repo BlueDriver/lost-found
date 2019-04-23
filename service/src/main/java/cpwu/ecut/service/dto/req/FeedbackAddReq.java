@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 /**
  * lost-found
  * cpwu.ecut.service.dto.req
+ * 新增反馈入参
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

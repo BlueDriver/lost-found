@@ -1,6 +1,7 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @Validated
+@NoArgsConstructor
 public class UserLoginReq {
     @NotBlank(message = "学校id不能为空")
     private String schoolId;

@@ -9,6 +9,7 @@ import java.util.Date;
 /**
  * lost-found
  * cpwu.ecut.service.dto.resp
+ * 学生认证
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

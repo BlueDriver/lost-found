@@ -19,8 +19,6 @@ import java.util.Date;
 @Accessors(chain = true)
 @Entity
 @Table(name = "T_STUDENT",
-//        indexes = {
-//                @Index(name = "INDEX_STD", columnList = "user_id,student_num")},
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_STUDENT", columnNames = {"user_id", "student_num"})}
 )

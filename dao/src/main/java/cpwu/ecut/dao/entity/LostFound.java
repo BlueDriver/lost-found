@@ -9,6 +9,7 @@ import java.util.Date;
 /**
  * lost-found
  * cpwu.ecut.dao.entity
+ * 失物招领表
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -67,16 +68,6 @@ public class LostFound {
      */
     @Column(nullable = true, length = 1024)
     private String images;
-//    /**
-//     * 图片2链接
-//     */
-//    @Column(nullable = true, length = 256)
-//    private String image2;
-//    /**
-//     * 图片3链接
-//     */
-//    @Column(nullable = true, length = 256)
-//    private String image3;
     /**
      * 类型id
      *

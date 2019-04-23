@@ -33,7 +33,7 @@ public class UserInfoListResp {
      */
     private Integer pageSize;
     /**
-     * 信息列表
+     * 用户信息列表
      */
     private List<UserInfoResp> list;
 }

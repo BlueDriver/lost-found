@@ -1,6 +1,5 @@
 package cpwu.ecut.common.constant.enums;
 
-import cpwu.ecut.common.utils.ExceptionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

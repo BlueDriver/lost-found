@@ -1,6 +1,7 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 
@@ -9,12 +10,14 @@ import javax.validation.constraints.NotBlank;
 /**
  * lost-found
  * cpwu.ecut.service.dto.req
+ * 新增类别入参
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
  * @date 2019/04/11 14:53 Thursday
  */
 @Data
+@NoArgsConstructor
 @Validated
 public class CategoryAddReq {
     /**

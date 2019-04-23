@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 /**
  * lost-found
  * cpwu.ecut.service.utils
+ * session工具类哦
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

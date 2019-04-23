@@ -1,11 +1,11 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,11 +19,16 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Validated
+@NoArgsConstructor
 public class UserInfoListReq {
-
+    /**
+     * 关键字
+     */
     @NotNull
     private String keyword;
-
+    /**
+     * 页号（0开始）
+     */
     @NotNull
     private Integer pageNum;
 

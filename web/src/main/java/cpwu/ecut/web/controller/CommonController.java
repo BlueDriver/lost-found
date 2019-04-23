@@ -25,7 +25,6 @@ import java.util.List;
  * @author BlueDriver
  * @email cpwu@foxmail.com
  * @date 2019/04/11 15:37 Thursday
- * @see cpwu.ecut.web.config.interceptor.LoginInterceptor
  */
 @RestController
 @Validated

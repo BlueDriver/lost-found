@@ -23,6 +23,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * lost-found
  * cpwu.ecut.web.controller
+ * 管理员接口
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

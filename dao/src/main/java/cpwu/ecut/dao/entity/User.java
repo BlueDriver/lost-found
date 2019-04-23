@@ -61,7 +61,7 @@ public class User {
     private String realName;
 
     /**
-     * 性别：-1未知，0女，1男     *
+     * 性别：-1未知，0女，1男
      *
      * @see cpwu.ecut.common.constant.enums.GenderEnum
      */

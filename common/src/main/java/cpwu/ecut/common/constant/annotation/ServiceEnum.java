@@ -32,11 +32,16 @@ public enum ServiceEnum implements EnumInter {
     COMMENT_PUB(5202, "发布评论"),
     COMMENT_MINE(5203, "查看与我相关的评论"),
     COMMENT_DELETE(5204, "删除评论"),
+    /**
+     * todo: 4/23/2019,023 10:26 AM
+     * 补齐所有
+     *
+     */
     ;
 
     private Integer code;
     /**
-     * 对应Log的about
+     * 对应Log类的about
      */
     private String desc;
 

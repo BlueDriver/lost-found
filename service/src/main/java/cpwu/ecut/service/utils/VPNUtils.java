@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * lost-found
  * cpwu.ecut.service.utils
- * 用户VPN相关工具类
+ * 用户VPN相关工具类（仅限ECUT）
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com

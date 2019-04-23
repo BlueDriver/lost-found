@@ -35,7 +35,9 @@ public class PublicationPageResp {
      */
     private Integer pageSize;
 
-
+    /**
+     * 招领列表
+     */
     private List<PublicationItem> list;
 
 

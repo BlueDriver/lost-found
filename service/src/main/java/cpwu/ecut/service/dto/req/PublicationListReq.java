@@ -1,6 +1,7 @@
 package cpwu.ecut.service.dto.req;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Max;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 /**
  * lost-found
  * cpwu.ecut.service.dto.req
+ * 查询启事列表
  *
  * @author BlueDriver
  * @email cpwu@foxmail.com
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Validated
+@NoArgsConstructor
 public class PublicationListReq {
     @NotNull
     private Integer kind;
