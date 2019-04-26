@@ -8,6 +8,7 @@ import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * lost-found
@@ -34,8 +35,13 @@ public class ImageUtils {
     /**
      * 去掉base64头部
      */
-    public String getBase64Image(String file) {
-        int index = file.indexOf(";base64,");
+    public String getBase64Image(String file) throws UnsupportedEncodingException {
+        int index = file.indexOf(flag);//对于json传的base64图片可直接截取
+
+        if (index == -1) {
+            file = java.net.URLDecoder.decode(file, "UTF-8");//对于使用url编码过的base64图片需要解码
+            index = file.indexOf(flag);
+        }
         if (index == -1) {
             return "";
         } else {
