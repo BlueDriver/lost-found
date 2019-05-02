@@ -21,21 +21,34 @@ import javax.validation.constraints.NotNull;
 @Validated
 @NoArgsConstructor
 public class PublicationListReq {
+    /**
+     * 类型
+     */
     @NotNull
     private Integer kind;
-
+    /**
+     * 类别
+     */
     @NotNull
     private String category;
-
+    /**
+     * 关键字
+     */
     @NotNull
     private String keyword;
-
+    /**
+     * 学号
+     */
     @NotNull
     private String username;
-
+    /**
+     * 页号
+     */
     @NotNull
     private Integer pageNum;
-
+    /**
+     * 页大小
+     */
     @NotNull
     @Max(value = 100, message = "每页限制最大100条")
     @Min(value = 1, message = "每页限制最小1条")

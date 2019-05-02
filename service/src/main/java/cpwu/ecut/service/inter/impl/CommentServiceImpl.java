@@ -92,6 +92,9 @@ public class CommentServiceImpl implements CommentService {
         commentDAO.saveAndFlush(comment);
     }
 
+    /**
+     * 用户消息（评论）
+     */
     @Override
     public List<UserMessage> listMessage(HttpSession session) throws Exception {
         User user = SessionUtils.checkAndGetUser(session);

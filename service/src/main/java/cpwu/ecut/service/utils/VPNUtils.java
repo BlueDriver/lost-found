@@ -37,6 +37,10 @@ public class VPNUtils {
 
     /**
      * 登录VPN1
+     *
+     * @param username 学号
+     * @param password 密码
+     * @return vpn的Cookie
      */
     public Map<String, String> getVPNCookies(String username, String password) throws Exception {
         Connection con1 = Jsoup.connect(VPN1_URL).timeout(TIME_OUT)
@@ -71,6 +75,10 @@ public class VPNUtils {
 
     /**
      * 登录门户
+     *
+     * @param username 学号
+     * @param password 密码
+     * @return 登录成功后的Cookie
      */
     public Map<String, String> getLoginCookies(String username, String password) throws Exception {
         Map<String, String> vpnCookies = getVPNCookies(username, password);

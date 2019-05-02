@@ -55,7 +55,9 @@ public class LostFoundServiceImpl implements LostFoundService {
     private CommentDAO commentDAO;
 
     private static final ObjectMapper mapper = new ObjectMapper();
-
+    /**
+     * 发布启事
+     */
     @Override
     public void add(PublicationAddReq req, HttpSession session) throws Exception {
         //校验申请类型
@@ -101,6 +103,13 @@ public class LostFoundServiceImpl implements LostFoundService {
         lostFoundDAO.saveAndFlush(lostFound);
     }
 
+    /**
+     * 分页查询招领启事
+     *
+     * @param req     请求参数
+     * @param session 会话
+     * @return 招领信息
+     */
     @Override
     public PublicationPageResp page(PublicationListReq req, HttpSession session) throws Exception {
         LostFound lostFoundEx = new LostFound();
@@ -204,7 +213,9 @@ public class LostFoundServiceImpl implements LostFoundService {
         }
         return list;
     }
-
+    /**
+     * 查看启事详情
+     */
     @Override
     public PublicationDetail detail(String id) throws Exception {
         Optional<LostFound> lostFoundOptional = lostFoundDAO.findById(id);
@@ -244,7 +255,9 @@ public class LostFoundServiceImpl implements LostFoundService {
 
         return detail;
     }
-
+    /**
+     * 删除启事（软删除）
+     */
     @Override
     public void removeLostFound(List<String> idList, HttpSession session) throws Exception {
         User user = SessionUtils.checkAndGetUser(session);
