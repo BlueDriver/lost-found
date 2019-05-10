@@ -29,6 +29,8 @@ public class UserMessage {
 
     private String title;
 
+    private String lostFoundId;
+
     private String content;
 
 }

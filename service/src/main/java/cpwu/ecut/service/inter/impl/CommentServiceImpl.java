@@ -139,6 +139,7 @@ public class CommentServiceImpl implements CommentService {
                     .setUsername(u.getRealName() + u.getUsername())
                     .setTime(comment.getCreateTime())
                     .setTitle(l.getTitle())
+                    .setLostFoundId(l.getId())
                     .setContent(comment.getContent());
             list.add(message);
         }
