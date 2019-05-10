@@ -76,8 +76,9 @@ public class UserController {
     @PostMapping("/detail")
     //@AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
     //@ActionLog(service = ServiceEnum.LOST_FOUND_DETAIL, action = ActionEnum.READ)
-    public ResponseDTO publicationDetail(@NotBlank(message = "启事id不能为空") @RequestParam String id) throws Exception {
-        return ResponseDTO.successObj("item", lostFoundService.detail(id));
+    public ResponseDTO publicationDetail(@NotBlank(message = "启事id不能为空") @RequestParam String id,
+                                         HttpSession session) throws Exception {
+        return ResponseDTO.successObj("item", lostFoundService.detail(id, session));
     }
 
     /**

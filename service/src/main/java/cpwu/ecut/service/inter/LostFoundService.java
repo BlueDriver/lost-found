@@ -30,7 +30,7 @@ public interface LostFoundService {
     /**
      * 查看启事详情
      */
-    PublicationDetail detail(String id) throws Exception;
+    PublicationDetail detail(String id, HttpSession session) throws Exception;
 
     /**
      * 删除启事（软删除）

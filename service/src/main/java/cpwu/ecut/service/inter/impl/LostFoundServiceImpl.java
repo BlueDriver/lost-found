@@ -55,6 +55,7 @@ public class LostFoundServiceImpl implements LostFoundService {
     private CommentDAO commentDAO;
 
     private static final ObjectMapper mapper = new ObjectMapper();
+
     /**
      * 发布启事
      */
@@ -159,6 +160,9 @@ public class LostFoundServiceImpl implements LostFoundService {
         return resp;
     }
 
+    /**
+     * 对象转换
+     */
     private List<PublicationItem> convert(List<LostFound> lostFoundList) throws IOException {
         List<PublicationItem> list = new ArrayList<>(lostFoundList.size());
         if (CollectionUtils.isEmpty(lostFoundList)) {
@@ -213,11 +217,12 @@ public class LostFoundServiceImpl implements LostFoundService {
         }
         return list;
     }
+
     /**
      * 查看启事详情
      */
     @Override
-    public PublicationDetail detail(String id) throws Exception {
+    public PublicationDetail detail(String id, HttpSession session) throws Exception {
         Optional<LostFound> lostFoundOptional = lostFoundDAO.findById(id);
         if (!lostFoundOptional.isPresent() || //不存在
                 RecordStatusEnum.DELETED.equals(lostFoundOptional.get().getRecordStatus())) {//已删除
@@ -237,8 +242,11 @@ public class LostFoundServiceImpl implements LostFoundService {
                     .setUsername(user.getUsername())
                     .setRealName(user.getRealName())
                     .setEmail(user.getEmail())
-                    .setPhoneNumber(user.getPhoneNumber())
-                    .setIsSelf(user.getId().equals(lostFound.getUserId()));
+                    .setPhoneNumber(user.getPhoneNumber());
+            //当前访问者是否为发布者
+            User currentUser = SessionUtils.getUser(session);
+            detail.setIsSelf(SessionUtils.getUser(session) == null ?
+                    false : currentUser.getId().equals(lostFound.getUserId()));
         }
 
         detail.setId(lostFound.getId())
@@ -255,6 +263,7 @@ public class LostFoundServiceImpl implements LostFoundService {
 
         return detail;
     }
+
     /**
      * 删除启事（软删除）
      */
