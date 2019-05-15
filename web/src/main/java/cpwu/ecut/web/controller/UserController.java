@@ -82,6 +82,17 @@ public class UserController {
     }
 
     /**
+     * 认领物品
+     */
+    @PostMapping("/claim")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.JUST)
+    public ResponseDTO claimLostFound(@NotBlank(message = "启事id不能为空") @RequestParam String id,
+                                      HttpSession session) throws Exception {
+        lostFoundService.claim(id, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
      * 启事评论列表
      */
     @PostMapping("/comments")

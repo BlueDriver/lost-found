@@ -272,7 +272,7 @@ public class UserServiceImpl implements UserService {
                     .setRealName(user.getRealName())
                     .setStudentNum(user.getUsername())
                     .setSchoolName(school.getSchoolName())
-                    .setKind(user.getKind())
+                    .setKind(CommonUtils.isEmail(req.getUsername()) ? user.getKind() : UserKindEnum.STUDENT.getCode())
                     .setEmail(user.getEmail())
                     .setPhoneNumber(user.getPhoneNumber())
                     .setGender(user.getGender())

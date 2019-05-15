@@ -36,4 +36,9 @@ public interface LostFoundService {
      * 删除启事（软删除）
      */
     void removeLostFound(List<String> idList, HttpSession session) throws Exception;
+
+    /**
+     * 认领物品
+     */
+    void claim(String id, HttpSession session) throws Exception;
 }

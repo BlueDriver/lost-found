@@ -42,6 +42,7 @@ public enum ErrorEnum {
     //启事相关
     LOST_FOUND_NOT_EXISTS(2501, "启事{}不存在或已被删除"),
     CATEGORY_NOT_EXISTS(2502, "类别{}不存在或已删除"),
+    LOST_FOUND_CLAIMED(2503, "物品已被他人认领"),
 
     //通知相关
     NOTICE_NOT_EXISTS(2601, "通知{}不存在或已删除"),

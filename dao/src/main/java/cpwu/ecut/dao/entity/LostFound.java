@@ -96,6 +96,11 @@ public class LostFound {
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date createTime;
     /**
+     * 认领人id
+     */
+    @Column(nullable = true, length = 64)
+    private String claimantId;
+    /**
      * 状态：<br />
      * 0：待审批<br/>
      * 1：寻回中（审批通过）<br/>

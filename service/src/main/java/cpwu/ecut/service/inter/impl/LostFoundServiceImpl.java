@@ -293,5 +293,24 @@ public class LostFoundServiceImpl implements LostFoundService {
         lostFoundDAO.saveAll(mine);
     }
 
+    /**
+     * 认领物品
+     */
+    @Override
+    public void claim(String id, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        Optional<LostFound> lostFoundOptional = lostFoundDAO.findById(id);
+        if (!lostFoundOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.LOST_FOUND_NOT_EXISTS, id);
+        }
+        LostFound lostFound = lostFoundOptional.get();
+        if (lostFound.getClaimantId() != null) {
+            throw ExceptionUtils.createException(ErrorEnum.LOST_FOUND_CLAIMED);
+        }
+        lostFound.setClaimantId(user.getId())
+                .setStatus(PublicationStatusEnum.CLAIMED.getCode())
+                .setDealTime(new Date());
+        lostFoundDAO.saveAndFlush(lostFound);
+    }
 }
 
