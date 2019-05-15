@@ -11,6 +11,7 @@ import cpwu.ecut.dao.entity.User;
 import cpwu.ecut.dao.inter.SchoolDAO;
 import cpwu.ecut.dao.inter.StudentDAO;
 import cpwu.ecut.dao.inter.UserDAO;
+import cpwu.ecut.service.dto.req.SetPasswordReq;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
 import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
@@ -486,5 +487,25 @@ public class UserServiceImpl implements UserService {
         user.setIcon(fileName);
         userDAO.saveAndFlush(user);
         return fileName;
+    }
+
+    /**
+     * 设置（修改）密码
+     */
+    @Override
+    public void setPassword(SetPasswordReq req, HttpSession session) throws Exception {
+        User user = SessionUtils.checkAndGetUser(session);
+        String pwd = CommonUtils.encodeByMd5(req.getOldPassword());
+        //旧密码错误
+        if (!user.getPassword().equals(pwd)) {
+            throw ExceptionUtils.createException(ErrorEnum.OLD_PASSWORD_ERROR);
+        }
+        //新密码不一致
+        if (!req.getNewPassword().equals(req.getConfirmPassword())) {
+            throw ExceptionUtils.createException(ErrorEnum.NEW_PASSWORD_DIFFERENT);
+        }
+        //设置新密码
+        user.setPassword(CommonUtils.encodeByMd5(req.getNewPassword()));
+        userDAO.saveAndFlush(user);
     }
 }

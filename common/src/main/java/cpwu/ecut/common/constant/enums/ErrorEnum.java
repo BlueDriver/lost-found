@@ -24,6 +24,8 @@ public enum ErrorEnum {
     VERIFY_CODE_ERROR(2004, "验证码错误"),
     USER_NOT_EXISTS(2005, "用户{}不存在"),
     USER_LOGIN_ERROR(2006, "登录状态异常，请重新登录"),
+    OLD_PASSWORD_ERROR(2007, "旧密码错误"),
+    NEW_PASSWORD_DIFFERENT(2008, "新密码不一致"),
 
     //学校相关
     SCHOOL_NOT_EXISTS(2101, "学校{}不存在"),

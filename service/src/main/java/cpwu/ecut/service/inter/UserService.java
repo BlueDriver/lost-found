@@ -1,5 +1,6 @@
 package cpwu.ecut.service.inter;
 
+import cpwu.ecut.service.dto.req.SetPasswordReq;
 import cpwu.ecut.service.dto.req.StudentRecognizeReq;
 import cpwu.ecut.service.dto.req.UserInfoListReq;
 import cpwu.ecut.service.dto.req.UserLoginReq;
@@ -67,5 +68,10 @@ public interface UserService {
      * 修改头像
      */
     String setIcon(String icon, HttpSession session) throws Exception;
+
+    /**
+     * 修改密码
+     */
+    void setPassword(SetPasswordReq req, HttpSession session) throws Exception;
 
 }

@@ -180,5 +180,14 @@ public class UserController {
         return ResponseDTO.successObj("icon", userService.setIcon(icon, session));
     }
 
+    /**
+     * 修改密码
+     */
+    @PostMapping("/setPassword")
+    @AuthCheck(level = UserKindEnum.STUDENT, mode = MatchModeEnum.MIN)
+    public ResponseDTO setPassword(@Valid @RequestBody SetPasswordReq req, HttpSession session) throws Exception {
+        userService.setPassword(req, session);
+        return ResponseDTO.successObj();
+    }
 
 }
