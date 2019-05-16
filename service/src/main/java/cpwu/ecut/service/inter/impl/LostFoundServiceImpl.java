@@ -205,6 +205,8 @@ public class LostFoundServiceImpl implements LostFoundService {
                         .setRealName(user.getRealName());
             }
             item.setKind(lostFound.getKind())
+                    .setStatus(lostFound.getStatus())
+                    .setClaimantId(lostFound.getClaimantId())
                     .setTime(lostFound.getCreateTime())
                     .setLocation(lostFound.getLocation())
                     .setTitle(lostFound.getTitle())

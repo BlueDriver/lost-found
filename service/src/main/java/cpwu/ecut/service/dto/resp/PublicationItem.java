@@ -24,6 +24,10 @@ public class PublicationItem {
 
     private Integer kind;
 
+    private Integer status;//状态
+
+    private String claimantId;//认领人id
+
     private String userId;
 
     private String username;
