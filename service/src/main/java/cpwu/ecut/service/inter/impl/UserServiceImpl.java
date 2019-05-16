@@ -508,4 +508,35 @@ public class UserServiceImpl implements UserService {
         user.setPassword(CommonUtils.encodeByMd5(req.getNewPassword()));
         userDAO.saveAndFlush(user);
     }
+
+    /**
+     * 重置密码
+     */
+    @Override
+    public void resetPassword(String userId, HttpSession session) throws Exception {
+        User currentUser = SessionUtils.checkAndGetUser(session);
+
+        Optional<User> userOptional = userDAO.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
+        }
+        User user = userOptional.get();
+        String newPassword = codeUtils.getRandomNum(6);
+        user.setPassword(CommonUtils.encodeByMd5(newPassword));
+        userDAO.saveAndFlush(user);
+
+        //模板参数
+        Map<String, Object> param = new HashMap<>();
+        param.put("username", CommonUtils.replaceString(user.getUsername(), 4, 3));
+        param.put("password", newPassword);
+        param.put("admin", currentUser.getRealName());
+        param.put("adminEmail", currentUser.getEmail());
+        param.put("appName", appName);
+        //发送邮件
+        mailSenderService.sendTemplateMessage(user.getEmail(), param,
+                "templates/mail/resetPassword.html", "密码重置通知",
+                systemEmail, appName);
+    }
+
+
 }

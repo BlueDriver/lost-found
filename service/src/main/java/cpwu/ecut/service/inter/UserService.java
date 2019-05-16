@@ -74,4 +74,9 @@ public interface UserService {
      */
     void setPassword(SetPasswordReq req, HttpSession session) throws Exception;
 
+    /**
+     * 重置密码
+     */
+    void resetPassword(String userId, HttpSession session) throws Exception;
+
 }

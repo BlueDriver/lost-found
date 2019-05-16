@@ -171,20 +171,20 @@ public class CommonUtils {
      * 处理后为：159*****222
      *
      * @param source      源字符串
-     * @param before      前几个将被保留
-     * @param after       后几个将被保留
+     * @param head        头几个将被保留
+     * @param tail        尾几个将被保留
      * @param replacement 替换成的字符
      */
-    public static String replaceString(String source, int before, int after, String replacement) {
-        if (before + after >= source.length()) {
+    public static String replaceString(String source, int head, int tail, String replacement) {
+        if (head + tail >= source.length()) {
             return source;
         }
         StringBuffer sb = new StringBuffer(source.length());
-        sb.append(source.substring(0, before));
-        for (int i = 0, t = source.length() - before - after; i < t; i++) {
+        sb.append(source.substring(0, head));
+        for (int i = 0, t = source.length() - head - tail; i < t; i++) {
             sb.append(replacement);
         }
-        sb.append(source.substring(source.length() - after));
+        sb.append(source.substring(source.length() - tail));
         return sb.toString();
     }
 
@@ -193,8 +193,8 @@ public class CommonUtils {
      *
      * @see CommonUtils#replaceString(String, int, int, String)
      */
-    public static String replaceString(String source, int start, int end) {
-        return replaceString(source, start, end, "*");
+    public static String replaceString(String source, int head, int tail) {
+        return replaceString(source, head, tail, "*");
     }
 
     private static final String emailRegex = "\\w+@\\w+(\\.\\w{2,3})*\\.\\w{2,3}";

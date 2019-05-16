@@ -83,6 +83,16 @@ public class AdminController {
     }
 
     /**
+     * 重置用户密码
+     */
+    @PostMapping("/resetPassword")
+    public ResponseDTO resetPassword(@NotBlank(message = "用户id不能为空") @RequestParam String userId, HttpSession session)
+            throws Exception {
+        userService.resetPassword(userId, session);
+        return ResponseDTO.successObj();
+    }
+
+    /**
      * 查看用户信息列表
      */
     @PostMapping("/userList")
