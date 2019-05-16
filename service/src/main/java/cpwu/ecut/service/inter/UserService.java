@@ -57,7 +57,7 @@ public interface UserService {
     /**
      * 用户设置为管理员
      */
-    void setAsAdmin(String userId) throws Exception;
+    void setAsAdmin(String userId, Integer flag) throws Exception;
 
     /**
      * 设置手机号

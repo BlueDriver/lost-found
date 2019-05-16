@@ -376,11 +376,10 @@ public class UserServiceImpl implements UserService {
     public UserInfoListResp userList(UserInfoListReq req, HttpSession session) throws Exception {
         User user = SessionUtils.checkAndGetUser(session);
         Page<Student> studentPage;
-        //keyword不空
-        //if (!StringUtils.isEmpty(req.getKeyword())) {
+        //根据keyword查询，若空则查询全部
         studentPage = studentDAO.findStudentByKeyword(req.getKeyword().trim(), user.getSchoolId(),
                 PageRequest.of(req.getPageNum() < 0 ? 0 : req.getPageNum(), req.getPageSize()));
-        //}
+
         Set<String> userIdSet = new HashSet<>(studentPage.getNumberOfElements());
         Map<String, User> userMap = new HashMap<>(studentPage.getNumberOfElements());
         if (studentPage.hasContent()) {
@@ -406,16 +405,25 @@ public class UserServiceImpl implements UserService {
                 resp.setLastLogin(u.getLastLogin())
                         .setEmail(u.getEmail())
                         .setPhoneNumber(u.getPhoneNumber())
-                        .setStatus(EnumUtils.getDesc(u.getStatus(), AccountStatusEnum.values()));
+                        .setStatus(EnumUtils.getDesc(u.getStatus(), AccountStatusEnum.values()))
+                        .setKind(u.getKind());
             }
             list.add(resp);
         }
+        //按照用户类型排序，管理员在前面
+        /*
+            todo: 5/16/2019,016 05:01 PM
+            If there are too many user, cannot search user by one time
+         */
+        Collections.sort(list);
+
         UserInfoListResp infoListResp = new UserInfoListResp();
         infoListResp.setList(list)
                 .setPageNum(studentPage.getNumber())
                 .setPageSize(studentPage.getSize())
                 .setTotal(studentPage.getTotalElements())
                 .setTotalPage(studentPage.getTotalPages());
+
         return infoListResp;
     }
 
@@ -451,13 +459,13 @@ public class UserServiceImpl implements UserService {
      * 设置用户为管理员
      */
     @Override
-    public void setAsAdmin(String userId) throws Exception {
+    public void setAsAdmin(String userId, Integer flag) throws Exception {
         Optional<User> userOptional = userDAO.findById(userId);
         if (!userOptional.isPresent()) {
             throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
         }
         User user = userOptional.get();
-        user.setKind(UserKindEnum.MANAGER.getCode());
+        user.setKind(YesNoEnum.YES.equals(flag) ? UserKindEnum.MANAGER.getCode() : UserKindEnum.STUDENT.getCode());
         userDAO.saveAndFlush(user);
     }
 

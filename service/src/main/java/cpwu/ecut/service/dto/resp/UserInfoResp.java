@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Data
 @Accessors(chain = true)
-public class UserInfoResp {
+public class UserInfoResp implements Comparable<UserInfoResp> {
     private String userId;
     private String name;
     private String username;
@@ -29,4 +29,13 @@ public class UserInfoResp {
     private String campus;
     private Date lastLogin;
     private String status;
+    private Integer kind;
+
+    /**
+     * 按用户类别降序，管理员在前
+     */
+    @Override
+    public int compareTo(UserInfoResp o) {
+        return o.getKind() - this.getKind();
+    }
 }

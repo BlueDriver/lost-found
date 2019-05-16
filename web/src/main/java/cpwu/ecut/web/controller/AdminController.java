@@ -2,6 +2,8 @@ package cpwu.ecut.web.controller;
 
 import cpwu.ecut.common.constant.annotation.AuthCheck;
 import cpwu.ecut.common.constant.enums.UserKindEnum;
+import cpwu.ecut.common.constant.enums.YesNoEnum;
+import cpwu.ecut.common.utils.EnumUtils;
 import cpwu.ecut.service.dto.req.CategoryAddReq;
 import cpwu.ecut.service.dto.req.FeedbackReplyReq;
 import cpwu.ecut.service.dto.req.NoticeAddReq;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * lost-found
@@ -120,10 +123,16 @@ public class AdminController {
 
     /**
      * 用户设置为管理员
+     *
+     * @param userId 用户id
+     * @param flag   0：否，1：是
+     * @see YesNoEnum
      */
     @PostMapping("/setAsAdmin")
-    public ResponseDTO setAsAdmin(@NotBlank(message = "用户id不能空") @RequestParam String userId) throws Exception {
-        userService.setAsAdmin(userId);
+    public ResponseDTO setAsAdmin(@NotBlank(message = "用户id不能空") @RequestParam String userId,
+                                  @NotNull(message = "标志位不能空") @RequestParam Integer flag) throws Exception {
+        EnumUtils.checkAndGetCode(flag, YesNoEnum.values());
+        userService.setAsAdmin(userId, flag);
         return ResponseDTO.successObj();
     }
 

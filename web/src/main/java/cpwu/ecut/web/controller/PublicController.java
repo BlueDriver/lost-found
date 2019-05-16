@@ -113,10 +113,6 @@ public class PublicController {
         return "/static/activate/" + userService.activateUser(code);
     }
 
-    /**
-     * todo: 4/10/2019,010 09:37 PM
-     * 重置密码
-     */
 
     /**
      * 校验验证码
