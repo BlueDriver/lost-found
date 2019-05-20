@@ -431,7 +431,9 @@ public class UserServiceImpl implements UserService {
      * 冻结用户
      */
     @Override
-    public void freezeUser(String userId) throws Exception {
+    public void freezeUser(String userId, HttpSession session) throws Exception {
+        User currentUser = SessionUtils.checkAndGetUser(session);
+
         Optional<User> userOptional = userDAO.findById(userId);
         if (!userOptional.isPresent()) {
             throw ExceptionUtils.createException(ErrorEnum.USER_NOT_EXISTS, userId);
@@ -439,6 +441,22 @@ public class UserServiceImpl implements UserService {
         User user = userOptional.get();
         user.setStatus(AccountStatusEnum.FREEZE.getCode());
         userDAO.saveAndFlush(user);
+
+        sendFreezeEmail(user, currentUser);
+    }
+
+    /**
+     * 用户冻结邮件提醒
+     */
+    private void sendFreezeEmail(User user, User handler) throws IOException, MessagingException {
+        Map<String, Object> param = new HashMap<>();
+        param.put("realName", user.getRealName() + user.getUsername());
+        param.put("handlerName", handler.getRealName());
+        param.put("handlerEmail", handler.getEmail());
+        param.put("appName", appName);
+        mailSenderService.sendTemplateMessage(user.getEmail(), param,
+                "templates/mail/userFreeze.html", "用户冻结通知",
+                systemEmail, appName);
     }
 
     /**
@@ -453,6 +471,9 @@ public class UserServiceImpl implements UserService {
         User user = userOptional.get();
         user.setStatus(AccountStatusEnum.NORMAL.getCode());
         userDAO.saveAndFlush(user);
+
+        mailSenderService.sendSimple(user.getEmail(), "您的账号" + user.getUsername() +
+                "已经解冻，可正常登录系统了。", "账号解冻通知");
     }
 
     /**

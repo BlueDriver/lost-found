@@ -106,7 +106,7 @@ public class CommentServiceImpl implements CommentService {
 
         List<String> lostIdList = new ArrayList<>(lostFoundList.size());
         lostFoundList.forEach(item -> lostIdList.add(item.getId()));
-        List<Comment> commentList = commentDAO.findAllByLostFoundIdIn(lostIdList);//查出来的包括状态为已删除的
+        List<Comment> commentList = commentDAO.findAllByLostFoundIdIn(lostIdList);
 
         List<String> userIdList = new ArrayList<>(commentList.size());
         commentList.forEach(item -> userIdList.add(item.getUserId()));
@@ -127,9 +127,6 @@ public class CommentServiceImpl implements CommentService {
         List<UserMessage> list = new ArrayList<>(commentList.size());
         UserMessage message;
         for (Comment comment : commentList) {
-            if (RecordStatusEnum.DELETED.equals(comment.getRecordStatus())) {
-                continue;
-            }
             l = lostFoundMap.get(comment.getLostFoundId());
             u = userMap.get(comment.getUserId());
             message = new UserMessage();
@@ -143,7 +140,6 @@ public class CommentServiceImpl implements CommentService {
                     .setContent(comment.getContent());
             list.add(message);
         }
-
         return list;
     }
 

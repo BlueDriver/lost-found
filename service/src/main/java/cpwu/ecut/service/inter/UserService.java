@@ -47,7 +47,7 @@ public interface UserService {
     /**
      * 冻结用户
      */
-    void freezeUser(String userId) throws Exception;
+    void freezeUser(String userId, HttpSession session) throws Exception;
 
     /**
      * 解冻用户

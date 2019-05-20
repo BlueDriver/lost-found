@@ -107,8 +107,9 @@ public class AdminController {
      * 冻结用户
      */
     @PostMapping("/freezeUser")
-    public ResponseDTO freezeUser(@NotBlank(message = "用户id不能空") @RequestParam String userId) throws Exception {
-        userService.freezeUser(userId);
+    public ResponseDTO freezeUser(@NotBlank(message = "用户id不能空") @RequestParam String userId, HttpSession session)
+            throws Exception {
+        userService.freezeUser(userId, session);
         return ResponseDTO.successObj();
     }
 
