@@ -32,8 +32,8 @@ public class CommonUtils {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             log.error("md5 init error", e);
+            System.exit(-1);
         }
     }
 
